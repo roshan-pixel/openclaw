@@ -1,8 +1,8 @@
 @echo off
-cd /d C:\Users\sgarm\openclaw-repos\openclaw
+cd /d C:\Users\sgarm\WinClaw-repos\WinClaw
 
 echo Stopping existing gateway...
-openclaw gateway stop
+WinClaw gateway stop
 timeout /t 2 /nobreak >nul
 
 echo Loading environment variables from .env...
@@ -26,5 +26,5 @@ if defined GEMINI_API_KEY (
 )
 
 echo.
-echo Starting OpenClaw Gateway...
-openclaw gateway
+echo Starting WinClaw Gateway...
+WinClaw gateway
