@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-MCP Loader for OpenClaw
-Connects to running MCP servers and provides tool definitions to OpenClaw
-This enables full integration of 22+ MCP tools with OpenClaw agents
+MCP Loader for WinClaw
+Connects to running MCP servers and provides tool definitions to WinClaw
+This enables full integration of 22+ MCP tools with WinClaw agents
 """
 
 import asyncio
@@ -98,7 +98,7 @@ class MCPClient:
             logger.info(f"Stopped {self.name}")
 
 class MCPLoader:
-    """Loads MCP servers and aggregates their tools for OpenClaw"""
+    """Loads MCP servers and aggregates their tools for WinClaw"""
     
     def __init__(self, mcp_dir: Path):
         self.mcp_dir = mcp_dir
@@ -139,7 +139,7 @@ class MCPLoader:
             await client.stop()
     
     def export_tools_json(self, path: Path):
-        """Export tool definitions as JSON for OpenClaw to use"""
+        """Export tool definitions as JSON for WinClaw to use"""
         output = {
             "version": "1.0",
             "timestamp": str(Path(__file__).stat().st_mtime),
@@ -154,7 +154,7 @@ class MCPLoader:
 async def main():
     """Main entry point"""
     print("\n" + "="*60)
-    print("OpenClaw MCP Loader")
+    print("WinClaw MCP Loader")
     print("="*60 + "\n")
     
     mcp_dir = Path(__file__).parent
@@ -175,7 +175,7 @@ async def main():
         await asyncio.sleep(1)  # Give servers time to start
         await loader.load_all_tools()
         
-        # Export for OpenClaw
+        # Export for WinClaw
         export_path = mcp_dir / "mcp_tools.json"
         loader.export_tools_json(export_path)
         
@@ -183,7 +183,7 @@ async def main():
         print(f"   Tools available: {len(loader.tools)}")
         print(f"   Tool definitions: {export_path}")
         print("\nNext steps:")
-        print("1. Copy mcp_tools.json to your OpenClaw config")
+        print("1. Copy mcp_tools.json to your WinClaw config")
         print("2. Register the tools in your agent configuration")
         print("3. The tools will be available in your agent sessions")
         
