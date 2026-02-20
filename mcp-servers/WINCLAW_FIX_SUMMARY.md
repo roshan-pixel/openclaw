@@ -1,19 +1,19 @@
-# OpenClaw Not Responding - ROOT CAUSE FOUND & FIXED
+# WinClaw Not Responding - ROOT CAUSE FOUND & FIXED
 
 ## 🎯 **The Problem**
 
-OpenClaw was **receiving** WhatsApp messages but **NOT sending responses back**.
+WinClaw was **receiving** WhatsApp messages but **NOT sending responses back**.
 
 ## 🔍 **Root Cause**
 
-Your **openclaw.json config file was CORRUPTED** with invalid characters:
+Your **WinClaw.json config file was CORRUPTED** with invalid characters:
 
 ```
 SyntaxError: Unexpected token '‹¯¨'
 failed to parse plugin manifest
 ```
 
-When OpenClaw's config is invalid, it can:
+When WinClaw's config is invalid, it can:
 - ✅ Receive messages (WhatsApp connection works)
 - ✅ Process with LLM (LiteLLM works)
 - ✅ Generate responses (AI works)
@@ -25,10 +25,10 @@ I restored your config from backup:
 
 ```bash
 # Backed up corrupted config
-openclaw.json → openclaw.json.corrupted
+WinClaw.json → WinClaw.json.corrupted
 
 # Restored working config
-openclaw.json.bak → openclaw.json
+WinClaw.json.bak → WinClaw.json
 ```
 
 The config is now valid JSON again.
@@ -37,8 +37,8 @@ The config is now valid JSON again.
 
 **Option 1: Automatic (Recommended)**
 ```bash
-cd C:\Users\sgarm\openclaw-repos\openclaw\mcp-servers
-restart_openclaw_fixed.bat
+cd C:\Users\sgarm\WinClaw-repos\WinClaw\mcp-servers
+restart_WinClaw_fixed.bat
 ```
 
 **Option 2: Manual**
@@ -46,7 +46,7 @@ restart_openclaw_fixed.bat
 # 1. Stop all services (close windows or Ctrl+C)
 
 # 2. Start system
-cd C:\Users\sgarm\openclaw-repos\openclaw\mcp-servers
+cd C:\Users\sgarm\WinClaw-repos\WinClaw\mcp-servers
 FINAL-PATCH.bat
 ```
 
@@ -54,7 +54,7 @@ FINAL-PATCH.bat
 
 After restarting:
 
-### **1. Check OpenClaw Gateway Logs**
+### **1. Check WinClaw Gateway Logs**
 Look for:
 ```
 ✅ "listening on ws://127.0.0.1:18789"
@@ -72,7 +72,7 @@ You should receive a response within 10-30 seconds.
 
 ### **3. Check Gateway Errors**
 ```bash
-type C:\Users\sgarm\.openclaw\gateway-err.log
+type C:\Users\sgarm\.WinClaw\gateway-err.log
 ```
 
 Should show NO new errors after restart.
@@ -83,7 +83,7 @@ Should show NO new errors after restart.
 ```
 WhatsApp message
     ↓
-OpenClaw receives ✅
+WinClaw receives ✅
     ↓
 LLM processes ✅
     ↓
@@ -98,7 +98,7 @@ Response generated ✅
 ```
 WhatsApp message
     ↓
-OpenClaw receives ✅
+WinClaw receives ✅
     ↓
 LLM processes ✅
     ↓
@@ -126,16 +126,16 @@ The screenshot tool hanging issue is SEPARATE from this.
 
 **To fix screenshots:**
 ```bash
-cd C:\Users\sgarm\openclaw-repos\openclaw\mcp-servers
+cd C:\Users\sgarm\WinClaw-repos\WinClaw\mcp-servers
 # Download snapshot_tool_fixed.py
 # Run: fix_snapshot_tool.bat
 ```
 
-### **3. OpenClaw → ULTIMATE Integration**
-Currently OpenClaw uses LiteLLM directly (port 4100).
+### **3. WinClaw → ULTIMATE Integration**
+Currently WinClaw uses LiteLLM directly (port 4100).
 To use ULTIMATE Gateway with MCP tools (port 18788):
 
-Edit `C:\Users\sgarm\.openclaw\openclaw.json`:
+Edit `C:\Users\sgarm\.WinClaw\WinClaw.json`:
 ```json
 {
   "models": {
@@ -157,8 +157,8 @@ You'd need to modify ULTIMATE to accept OpenAI-compatible requests.
 
 | Component | Status | Notes |
 |-----------|--------|-------|
-| **OpenClaw Config** | ✅ **FIXED** | Restored from backup |
-| OpenClaw → WhatsApp | 🔄 **Needs Restart** | Will work after restart |
+| **WinClaw Config** | ✅ **FIXED** | Restored from backup |
+| WinClaw → WhatsApp | 🔄 **Needs Restart** | Will work after restart |
 | MCP Server stdio | ✅ Fixed | Ultra-clean version deployed |
 | Snapshot Tool | ⚠️ Needs Fix | Deploy snapshot_tool_fixed.py |
 | ULTIMATE Integration | ⚠️ Optional | Currently bypassed |
@@ -166,7 +166,7 @@ You'd need to modify ULTIMATE to accept OpenAI-compatible requests.
 ## 📝 **What to Do RIGHT NOW**
 
 1. ✅ **Config is fixed** (done automatically)
-2. 🔄 **Restart system** (run restart_openclaw_fixed.bat)
+2. 🔄 **Restart system** (run restart_WinClaw_fixed.bat)
 3. 🧪 **Test** (send "hello" from WhatsApp)
 4. ✅ **Should work!**
 
@@ -174,26 +174,26 @@ You'd need to modify ULTIMATE to accept OpenAI-compatible requests.
 
 Check these logs:
 ```bash
-# OpenClaw errors
-type C:\Users\sgarm\.openclaw\gateway-err.log
+# WinClaw errors
+type C:\Users\sgarm\.WinClaw\gateway-err.log
 
-# OpenClaw activity
-type C:\Users\sgarm\.openclaw\logs\openclaw.log | findstr "outbound"
+# WinClaw activity
+type C:\Users\sgarm\.WinClaw\logs\WinClaw.log | findstr "outbound"
 
 # ULTIMATE Gateway
-type C:\Users\sgarm\openclaw-repos\openclaw\mcp-servers\logs\ultimate_gateway.log
+type C:\Users\sgarm\WinClaw-repos\WinClaw\mcp-servers\logs\ultimate_gateway.log
 ```
 
 Look for:
 - "Invalid config" → Config still broken
-- "outbound message" → OpenClaw trying to send
+- "outbound message" → WinClaw trying to send
 - "sent message" → Message delivered
 
 ## 🎉 **Expected Result**
 
 After restart and sending "hello":
 
-**OpenClaw logs should show:**
+**WinClaw logs should show:**
 ```
 inbound message: "hello"
 embedded run start
@@ -216,9 +216,9 @@ Likely causes:
 - Copy-paste with invalid characters
 
 **Prevention:**
-- Always backup before editing: `copy openclaw.json openclaw.json.backup`
+- Always backup before editing: `copy WinClaw.json WinClaw.json.backup`
 - Use proper JSON editor
-- Validate with: `Get-Content openclaw.json | ConvertFrom-Json`
+- Validate with: `Get-Content WinClaw.json | ConvertFrom-Json`
 
 ---
 
