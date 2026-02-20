@@ -12,6 +12,7 @@ Date: Feb 2026
 """
 
 import asyncio
+import os
 import websockets
 import json
 import requests
@@ -28,7 +29,7 @@ import time
 
 # Gateway v4.0 settings
 GATEWAY_URL = "http://localhost:8000"
-GATEWAY_API_KEY = "dev-key-123"  # Change this to your actual API key
+GATEWAY_API_KEY = os.environ.get("WINCLAW_API_KEY", "")
 
 # OpenClaw CLI WebSocket
 OPENCLAW_WS = "ws://127.0.0.1:18789"
@@ -383,7 +384,7 @@ async def main():
     if not check_gateway_health():
         logger.error("\n❌ Gateway v4.0 is not running!")
         logger.error("\nPlease start it first:")
-        logger.error("  cd C:\\Users\\sgarm\\openclaw-repos\\openclaw\\mcp-servers")
+        logger.error("  cd <your-openclaw-repo-path>\\mcp-servers")
         logger.error("  python openclaw_gateway.py")
         sys.exit(1)
 

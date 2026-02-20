@@ -10,8 +10,8 @@ import json
 from datetime import datetime
 import os
 
-GATEWAY_URL = "http://localhost:8000"
-GATEWAY_API_KEY = "dev-key-123"
+GATEWAY_URL = os.environ.get("WINCLAW_GATEWAY_URL", "http://localhost:8000")
+GATEWAY_API_KEY = os.environ.get("WINCLAW_API_KEY", "")
 
 # Poll OpenClaw CLI recent messages
 def get_recent_messages():

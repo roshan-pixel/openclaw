@@ -6,7 +6,7 @@ print("VISION API TEST - FIXED")
 print("=" * 70)
 
 # Use absolute path
-creds_path = r"C:\Users\sgarm\openclaw-repos\openclaw\keys\vision-key.json"
+creds_path = os.path.join(os.path.expanduser("~"), "openclaw-repos", "openclaw", "keys", "vision-key.json")
 
 print(f"\n1. Checking credentials: {creds_path}")
 if os.path.exists(creds_path):

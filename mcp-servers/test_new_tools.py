@@ -9,7 +9,7 @@ from mcp.client.stdio import stdio_client
 async def test_new_tools():
     server_params = StdioServerParameters(
         command="python",
-        args=["C:\\Users\\sgarm\\openclaw-repos\\openclaw\\mcp-servers\\windows_mcp_server.py"],
+        args=["windows_mcp_server.py"],
         env=None
     )
     

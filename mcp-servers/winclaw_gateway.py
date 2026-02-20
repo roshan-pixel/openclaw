@@ -110,7 +110,21 @@ except Exception as e:
 # ============================================================
 # CONFIG
 # ============================================================
-VALID_API_KEYS = set(os.environ.get("WinClaw_API_KEYS", "dev-key-123,test-key-456").split(","))
+_raw_api_keys = os.environ.get("WinClaw_API_KEYS", "")
+if not _raw_api_keys:
+    raise RuntimeError(
+        "WinClaw_API_KEYS environment variable is not set. "
+        "Set it to a comma-separated list of API keys before starting the gateway."
+    )
+VALID_API_KEYS = set(k.strip() for k in _raw_api_keys.split(",") if k.strip())
+if not VALID_API_KEYS:
+    raise RuntimeError(
+        "WinClaw_API_KEYS contains no valid (non-whitespace) keys. "
+        "Provide at least one key."
+    )
+
+# WhatsApp bridge / local LLM endpoint — override via WHATSAPP_BRIDGE_URL env var
+WHATSAPP_BRIDGE_URL = os.environ.get("WHATSAPP_BRIDGE_URL", "http://localhost:18788")
 
 # Global instances
 mcp_manager: Optional[MCPManager] = None
@@ -405,7 +419,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://localhost", "http://localhost:8000", "http://127.0.0.1", "http://127.0.0.1:8000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -717,11 +731,11 @@ async def create_response(request: ChatRequest):
 
         logger.info(f"🔧 Loaded {len(tools)} tools for AI")
 
-        # Call ULTIMATE gateway (18788) via litellm-compatible interface
+        # Call ULTIMATE gateway via litellm-compatible interface
         response = await litellm.acompletion(
             model="deepseek-r1:8b",
             messages=request.messages,
-            api_base="http://localhost:18788",
+            api_base=WHATSAPP_BRIDGE_URL,
             tools=tools if tools else None,
             max_tokens=request.max_tokens,
             stream=False
@@ -786,7 +800,7 @@ async def create_response(request: ChatRequest):
             final_response = await litellm.acompletion(
                 model="deepseek-r1:8b",
                 messages=messages,
-                api_base="http://localhost:18788",
+                api_base=WHATSAPP_BRIDGE_URL,
                 max_tokens=request.max_tokens,
                 stream=False
             )

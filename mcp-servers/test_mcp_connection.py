@@ -12,7 +12,7 @@ async def test_connection():
         
         server_params = StdioServerParameters(
             command="python",
-            args=["C:\\Users\\sgarm\\openclaw-repos\\openclaw\\mcp-servers\\windows_mcp_server.py"],
+            args=["windows_mcp_server.py"],
             env=None
         )
         

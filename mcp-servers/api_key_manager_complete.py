@@ -18,9 +18,10 @@ print("ANTHROPIC API KEY MANAGER - ENHANCED")
 print("=" * 70)
 
 # Locations where API key should be stored
+_home = os.path.expanduser("~")
 locations = {
-    'openclaw': r'C:\Users\sgarm\.openclaw\.env',
-    'project': r'C:\Users\sgarm\openclaw-repos\openclaw\.env',
+    'openclaw': os.path.join(_home, '.openclaw', '.env'),
+    'project': os.path.join(_home, 'openclaw-repos', 'openclaw', '.env'),
     'registry': 'HKCU\\Environment',
 }
 
@@ -212,7 +213,7 @@ def update_env_file(path, api_key):
 
 def store_encrypted_backup(api_key):
     """Store encrypted backup"""
-    backup_path = r'C:\Users\sgarm\.openclaw\api_key.encrypted'
+    backup_path = os.path.join(os.path.expanduser('~'), '.openclaw', 'api_key.encrypted')
     os.makedirs(os.path.dirname(backup_path), exist_ok=True)
 
     encrypted = simple_encrypt(api_key)
@@ -272,7 +273,7 @@ def main():
             return
 
     elif choice == '3':
-        backup_path = r'C:\Users\sgarm\.openclaw\api_key.encrypted'
+        backup_path = os.path.join(os.path.expanduser('~'), '.openclaw', 'api_key.encrypted')
         if os.path.exists(backup_path):
             with open(backup_path, 'r') as f:
                 data = json.load(f)
@@ -374,11 +375,11 @@ def main():
     if store_choice in ['3', '4']:
         print("\n1. CLOSE ALL terminals")
         print("2. Open NEW terminal")
-        print("3. cd C:\\Users\\sgarm\\openclaw-repos\\openclaw")
+        print("3. cd <your-openclaw-repo-path>\\mcp-servers")
         print("4. openclaw gateway")
     else:
         print("\n1. Restart OpenClaw gateway:")
-        print("   cd C:\\Users\\sgarm\\openclaw-repos\\openclaw")
+        print("   cd <your-openclaw-repo-path>\\mcp-servers")
         print("   openclaw gateway")
 
     print("\n5. Test via WhatsApp:")

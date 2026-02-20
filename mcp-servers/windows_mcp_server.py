@@ -58,31 +58,53 @@ class NullIO:
     def isatty(self): return False
 
 def with_null_streams(func):
-    """Decorator to execute function with all streams redirected"""
-    def wrapper(*args, **kwargs):
-        # Save current streams
-        old_stdout = sys.stdout
-        old_stderr = sys.stderr
-        old_stdin = sys.stdin
-        
-        # Redirect everything
-        null = NullIO()
-        sys.stdout = null
-        sys.stderr = null
-        sys.stdin = null
-        
-        try:
-            result = func(*args, **kwargs)
-            return result
-        except Exception as e:
-            log(f"ERROR in {func.__name__}: {str(e)}")
-            raise
-        finally:
-            # Always restore
-            sys.stdout = old_stdout
-            sys.stderr = old_stderr
-            sys.stdin = old_stdin
-    return wrapper
+    """Decorator to execute function with all streams redirected.
+    Handles both sync and async functions correctly.
+    Async: only nulls stdout/stderr (stdin must stay open for MCP stdio_server).
+    Sync: nulls stdout, stderr, and stdin (safe for non-async tool loaders)."""
+    if asyncio.iscoroutinefunction(func):
+        async def async_wrapper(*args, **kwargs):
+            old_stdout = sys.stdout
+            old_stderr = sys.stderr
+            # stdin is intentionally preserved for async paths —
+            # the MCP stdio_server reads from it concurrently.
+            null = NullIO()
+            sys.stdout = null
+            sys.stderr = null
+            try:
+                return await func(*args, **kwargs)
+            except Exception as e:
+                log(f"ERROR in {func.__name__}: {str(e)}")
+                raise
+            finally:
+                sys.stdout = old_stdout
+                sys.stderr = old_stderr
+        return async_wrapper
+    else:
+        def wrapper(*args, **kwargs):
+            # Save current streams
+            old_stdout = sys.stdout
+            old_stderr = sys.stderr
+            old_stdin = sys.stdin
+
+            # Redirect all three (sync loaders don't read stdin via the event loop)
+            null = NullIO()
+            sys.stdout = null
+            sys.stderr = null
+            sys.stdin = null
+
+            try:
+                result = func(*args, **kwargs)
+                return result
+            except Exception as e:
+                log(f"ERROR in {func.__name__}: {str(e)}")
+                raise
+            finally:
+                # Always restore
+                sys.stdout = old_stdout
+                sys.stderr = old_stderr
+                sys.stdin = old_stdin
+        return wrapper
 
 # ============================================================
 # SERVER SETUP

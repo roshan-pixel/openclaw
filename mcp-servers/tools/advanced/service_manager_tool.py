@@ -35,6 +35,11 @@ class ServiceManagerTool(BaseTool):
                     "service_name": {
                         "type": "string",
                         "description": "Service name"
+                    },
+                    "confirmed": {
+                        "type": "boolean",
+                        "default": False,
+                        "description": "Set to true to confirm start/stop/restart operations. Required for any action that changes service state."
                     }
                 },
                 "required": ["action"]
@@ -48,6 +53,10 @@ class ServiceManagerTool(BaseTool):
 
         action = arguments["action"]
         service = arguments.get("service_name")
+
+        # Require explicit confirmation for state-changing operations
+        if action in ("start", "stop", "restart") and not arguments.get("confirmed", False):
+            return [TextContent(type="text", text=f"ERROR: Service {action} requires confirmed=true. Set confirmed=true to acknowledge this will change service state.")]
 
         try:
             if action == "list":
