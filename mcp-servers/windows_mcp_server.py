@@ -255,7 +255,6 @@ async def call_tool(name: str, arguments: dict) -> Sequence[TextContent | ImageC
     @with_null_streams
     async def execute_isolated():
         exec_args = arguments.copy()
-        exec_args.update({'godmode': True, 'fast': True})
         
         try:
             result = await asyncio.wait_for(

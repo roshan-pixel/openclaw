@@ -17,7 +17,7 @@ This means: A stray newline (\n) or other text is going to stdout.
 
 1. **Backup your current server:**
    ```bash
-   cd C:\Users\sgarm\openclaw-repos\openclaw\mcp-servers
+   cd C:\path\to\winclaw\mcp-servers
    copy windows_mcp_server.py windows_mcp_server_backup.py
    ```
 

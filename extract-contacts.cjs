@@ -7,7 +7,7 @@ async function extractGroupContacts() {
     console.log('🔄 Connecting to WhatsApp...');
     
     // Path to your WhatsApp session
-    const authPath = path.join('C:', 'Users', 'sgarm', '.openclaw', 'whatsapp', 'default');
+    const authPath = path.join(process.env.USERPROFILE || process.env.HOME || 'C:\\Users\\user', '.openclaw', 'whatsapp', 'default');
     console.log(`📂 Auth path: ${authPath}`);
     
     const { state, saveCreds } = await useMultiFileAuthState(authPath);

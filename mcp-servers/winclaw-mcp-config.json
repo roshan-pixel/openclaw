@@ -1,18 +1,18 @@
 {
   "$schema": "https://docs.winclaw.ai/config-schema.json",
-  "$comment": "Add these settings to your winclaw.json to enable the 22 MCP tools",
+  "$comment": "Add these settings to your winclaw.json to enable the MCP tools. Replace <WINCLAW_DIR> with the absolute path to your winclaw checkout.",
   
   "agents": {
     "defaults": {
       "cliBackends": {
         "mcp": {
-          "$comment": "Wrapper for 22 MCP tools (Windows MCP + WhatsApp Bridge)",
+          "$comment": "Wrapper for Windows MCP tools",
           "command": "python",
-          "args": ["C:/Users/sgarm/winclaw-repos/winclaw/mcp-servers/mcp-cli-tool.py"],
+          "args": ["<WINCLAW_DIR>/mcp-servers/mcp-cli-tool.py"],
           "output": "json",
           "input": "stdin",
           "env": {
-            "PYTHONPATH": "C:/Users/sgarm/winclaw-repos/winclaw/mcp-servers"
+            "PYTHONPATH": "<WINCLAW_DIR>/mcp-servers"
           },
           "serialize": false
         }
@@ -48,7 +48,7 @@
   },
 
   "$comment_about_mcp_tools": {
-    "description": "These 22 tools are now available:",
+    "description": "These 21 Windows tools are available:",
     "windows_mcp": {
       "count": 21,
       "examples": [
@@ -60,20 +60,12 @@
         "windows-mcp-vision - OCR and image analysis",
         "... and 15 more Windows system tools"
       ]
-    },
-    "whatsapp_bridge": {
-      "count": 3,
-      "examples": [
-        "whatsapp-log-message - Log events",
-        "whatsapp-bridge-health - Check status",
-        "whatsapp-send-log - Send message logs"
-      ]
     }
   },
 
   "$integration_instructions": {
     "step_1_merge_config": "Copy the 'agents.defaults.cliBackends.mcp' section to your winclaw.json",
-    "step_2_update_paths": "Update the Python path to match your installation",
+    "step_2_update_paths": "Replace <WINCLAW_DIR> with the absolute path to your WinClaw installation",
     "step_3_restart_gateway": "Run: winclaw gateway restart",
     "step_4_verify": "Test with: python mcp-cli-tool.py status",
     "step_5_use_tools": "Your agent can now call any MCP tool directly"

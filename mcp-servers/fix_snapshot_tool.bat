@@ -9,7 +9,7 @@ echo SNAPSHOT TOOL FIX
 echo ============================================================
 echo.
 
-cd C:\Users\sgarm\openclaw-repos\openclaw\mcp-servers
+cd /d "%~dp0"
 
 if not exist "tools\snapshot_tool.py" (
     echo ERROR: snapshot_tool.py not found!

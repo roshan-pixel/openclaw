@@ -11,7 +11,7 @@
 ### Step 1: Verify MCP Servers Work (1 min)
 
 ```bash
-cd C:\Users\sgarm\openclaw-repos\openclaw\mcp-servers
+cd C:\path\to\winclaw\mcp-servers
 
 # Check status
 python mcp-cli-tool.py status
@@ -21,7 +21,7 @@ Expected output: Both servers listed with tool counts.
 
 ### Step 2: Update Your OpenClaw Config (2 min)
 
-**File:** `C:\Users\sgarm\.openclaw\openclaw.json`
+**File:** `%USERPROFILE%\.openclaw\openclaw.json`
 
 Add this to your config (or merge if sections exist):
 
@@ -32,7 +32,7 @@ Add this to your config (or merge if sections exist):
       "cliBackends": {
         "mcp": {
           "command": "python",
-          "args": ["C:/Users/sgarm/openclaw-repos/openclaw/mcp-servers/mcp-cli-tool.py"],
+          "args": ["C:/path/to/winclaw/mcp-servers/mcp-cli-tool.py"],
           "output": "json",
           "input": "stdin"
         }
@@ -161,7 +161,7 @@ Agent: [Uses windows-mcp-snapshot and windows-mcp-vision]
 
 3. **Verify OpenClaw config:**
    ```bash
-   grep -A 5 "cliBackends" C:\Users\sgarm\.openclaw\openclaw.json
+   grep -A 5 "cliBackends" %USERPROFILE%\.openclaw\openclaw.json
    ```
 
 4. **Restart gateway:**
@@ -183,7 +183,7 @@ cat mcp_servers_startup.log
 Make sure the Python script is executable:
 
 ```bash
-icacls "C:\Users\sgarm\openclaw-repos\openclaw\mcp-servers\mcp-cli-tool.py" /grant Everyone:F
+icacls "C:\path\to\winclaw\mcp-servers\mcp-cli-tool.py" /grant Everyone:F
 ```
 
 ## Next Steps

@@ -35,6 +35,8 @@ async function runPowerShellAsync(command, timeoutMs = 30000) {
 
 function runPython(script) {
   const pythonPaths = [
+    "python",
+    "python3",
     "C:\\Python312\\python.exe",
     "C:\\Python314\\python.exe",
     "C:\\Python311\\python.exe",

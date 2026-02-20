@@ -12,7 +12,7 @@ echo.
 
 echo [2] Checking .env File Location...
 echo ----------------------------------------
-cd /d C:\Users\sgarm\openclaw-repos\openclaw
+cd /d %~dp0
 if exist .env (
     echo [✓] .env file found
     echo Content:
