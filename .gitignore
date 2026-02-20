@@ -96,3 +96,5 @@ apps/ios/LocalSigning.xcconfig
 "keys/" 
 ".env.backup" 
 "whatsapp-contacts.json" 
+".serena/cache/typescript/document_symbols.pkl" 
+"structure.txt" 
