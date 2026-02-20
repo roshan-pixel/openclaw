@@ -98,3 +98,10 @@ apps/ios/LocalSigning.xcconfig
 "whatsapp-contacts.json" 
 ".serena/cache/typescript/document_symbols.pkl" 
 "structure.txt" 
+
+
+# Sensitive keys
+keys/
+**/*.json
+!package.json
+!tsconfig.json
