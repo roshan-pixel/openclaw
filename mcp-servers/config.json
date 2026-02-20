@@ -1,0 +1,42 @@
+{
+  "server": {
+    "name": "Windows MCP Server",
+    "version": "1.0.0",
+    "description": "Windows automation tools for OpenClaw",
+    "port": null,
+    "transport": "stdio"
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "logs/windows_mcp.log",
+    "max_size_mb": 10,
+    "backup_count": 5
+  },
+  "tools": {
+    "enabled": [
+      "Click",
+      "Type",
+      "Scroll",
+      "Move",
+      "Shortcut",
+      "App",
+      "Shell",
+      "Snapshot",
+      "Wait",
+      "Scrape",
+      "MultiSelect",
+      "MultiEdit"
+    ]
+  },
+  "security": {
+    "require_admin": false,
+    "allow_shell_commands": true,
+    "restricted_commands": []
+  },
+  "performance": {
+    "screenshot_quality": 85,
+    "max_screenshot_dimension": 1920,
+    "typing_interval": 0.05,
+    "click_duration": 0.1
+  }
+}

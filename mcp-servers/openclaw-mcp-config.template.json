@@ -1,0 +1,29 @@
+﻿{
+  "$schema": "https://docs.openclaw.ai/config-schema.json",
+  "$comment": "Copy this to openclaw-mcp-config.json and replace <YOUR_ABSOLUTE_PATH>",
+  "agents": {
+    "defaults": {
+      "cliBackends": {
+        "mcp": {
+          "command": "python",
+          "args": ["<YOUR_ABSOLUTE_PATH>/mcp-servers/mcp-cli-tool.py"],
+          "output": "json",
+          "input": "stdin",
+          "env": {
+            "PYTHONPATH": "<YOUR_ABSOLUTE_PATH>/mcp-servers"
+          },
+          "serialize": false
+        }
+      },
+      "models": {
+        "mcp:windows-snapshot": {
+          "alias": "take-screenshot",
+          "params": { "use_vision": true }
+        },
+        "mcp:windows-shell": {
+          "alias": "run-command"
+        }
+      }
+    }
+  }
+}

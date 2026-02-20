@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.resolveNestedAllowlistDecision = exports.resolveChannelMatchConfig = exports.resolveChannelEntryMatchWithFallback = exports.resolveChannelEntryMatch = exports.normalizeChannelSlug = exports.buildChannelKeyCandidates = exports.applyChannelMatchMeta = void 0;
+var channel_config_js_1 = require("../channel-config.js");
+Object.defineProperty(exports, "applyChannelMatchMeta", { enumerable: true, get: function () { return channel_config_js_1.applyChannelMatchMeta; } });
+Object.defineProperty(exports, "buildChannelKeyCandidates", { enumerable: true, get: function () { return channel_config_js_1.buildChannelKeyCandidates; } });
+Object.defineProperty(exports, "normalizeChannelSlug", { enumerable: true, get: function () { return channel_config_js_1.normalizeChannelSlug; } });
+Object.defineProperty(exports, "resolveChannelEntryMatch", { enumerable: true, get: function () { return channel_config_js_1.resolveChannelEntryMatch; } });
+Object.defineProperty(exports, "resolveChannelEntryMatchWithFallback", { enumerable: true, get: function () { return channel_config_js_1.resolveChannelEntryMatchWithFallback; } });
+Object.defineProperty(exports, "resolveChannelMatchConfig", { enumerable: true, get: function () { return channel_config_js_1.resolveChannelMatchConfig; } });
+Object.defineProperty(exports, "resolveNestedAllowlistDecision", { enumerable: true, get: function () { return channel_config_js_1.resolveNestedAllowlistDecision; } });

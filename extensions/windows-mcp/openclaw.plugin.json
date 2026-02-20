@@ -1,0 +1,11 @@
+{
+  "id": "windows-mcp",
+  "name": "Windows MCP",
+  "description": "Full Windows desktop automation — click, type, shell, screenshot, shortcuts.",
+  "main": "index.js",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {}
+  }
+}

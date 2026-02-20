@@ -1,0 +1,33 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.webAuthExists = exports.waitForWaConnection = exports.WA_WEB_AUTH_DIR = exports.pickWebChannel = exports.logWebSelfId = exports.logoutWeb = exports.getStatusCode = exports.formatError = exports.createWaSocket = exports.sendMessageWhatsApp = exports.optimizeImageToJpeg = exports.loadWebMedia = exports.loginWeb = exports.monitorWebInbox = exports.extractText = exports.extractMediaPlaceholder = exports.runWebHeartbeatOnce = exports.resolveHeartbeatRecipients = exports.monitorWebChannel = exports.HEARTBEAT_TOKEN = exports.HEARTBEAT_PROMPT = exports.DEFAULT_WEB_MEDIA_BYTES = void 0;
+// Barrel exports for the web channel pieces. Splitting the original 900+ line
+// module keeps responsibilities small and testable.
+var auto_reply_js_1 = require("./web/auto-reply.js");
+Object.defineProperty(exports, "DEFAULT_WEB_MEDIA_BYTES", { enumerable: true, get: function () { return auto_reply_js_1.DEFAULT_WEB_MEDIA_BYTES; } });
+Object.defineProperty(exports, "HEARTBEAT_PROMPT", { enumerable: true, get: function () { return auto_reply_js_1.HEARTBEAT_PROMPT; } });
+Object.defineProperty(exports, "HEARTBEAT_TOKEN", { enumerable: true, get: function () { return auto_reply_js_1.HEARTBEAT_TOKEN; } });
+Object.defineProperty(exports, "monitorWebChannel", { enumerable: true, get: function () { return auto_reply_js_1.monitorWebChannel; } });
+Object.defineProperty(exports, "resolveHeartbeatRecipients", { enumerable: true, get: function () { return auto_reply_js_1.resolveHeartbeatRecipients; } });
+Object.defineProperty(exports, "runWebHeartbeatOnce", { enumerable: true, get: function () { return auto_reply_js_1.runWebHeartbeatOnce; } });
+var inbound_js_1 = require("./web/inbound.js");
+Object.defineProperty(exports, "extractMediaPlaceholder", { enumerable: true, get: function () { return inbound_js_1.extractMediaPlaceholder; } });
+Object.defineProperty(exports, "extractText", { enumerable: true, get: function () { return inbound_js_1.extractText; } });
+Object.defineProperty(exports, "monitorWebInbox", { enumerable: true, get: function () { return inbound_js_1.monitorWebInbox; } });
+var login_js_1 = require("./web/login.js");
+Object.defineProperty(exports, "loginWeb", { enumerable: true, get: function () { return login_js_1.loginWeb; } });
+var media_js_1 = require("./web/media.js");
+Object.defineProperty(exports, "loadWebMedia", { enumerable: true, get: function () { return media_js_1.loadWebMedia; } });
+Object.defineProperty(exports, "optimizeImageToJpeg", { enumerable: true, get: function () { return media_js_1.optimizeImageToJpeg; } });
+var outbound_js_1 = require("./web/outbound.js");
+Object.defineProperty(exports, "sendMessageWhatsApp", { enumerable: true, get: function () { return outbound_js_1.sendMessageWhatsApp; } });
+var session_js_1 = require("./web/session.js");
+Object.defineProperty(exports, "createWaSocket", { enumerable: true, get: function () { return session_js_1.createWaSocket; } });
+Object.defineProperty(exports, "formatError", { enumerable: true, get: function () { return session_js_1.formatError; } });
+Object.defineProperty(exports, "getStatusCode", { enumerable: true, get: function () { return session_js_1.getStatusCode; } });
+Object.defineProperty(exports, "logoutWeb", { enumerable: true, get: function () { return session_js_1.logoutWeb; } });
+Object.defineProperty(exports, "logWebSelfId", { enumerable: true, get: function () { return session_js_1.logWebSelfId; } });
+Object.defineProperty(exports, "pickWebChannel", { enumerable: true, get: function () { return session_js_1.pickWebChannel; } });
+Object.defineProperty(exports, "WA_WEB_AUTH_DIR", { enumerable: true, get: function () { return session_js_1.WA_WEB_AUTH_DIR; } });
+Object.defineProperty(exports, "waitForWaConnection", { enumerable: true, get: function () { return session_js_1.waitForWaConnection; } });
+Object.defineProperty(exports, "webAuthExists", { enumerable: true, get: function () { return session_js_1.webAuthExists; } });

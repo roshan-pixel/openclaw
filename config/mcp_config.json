@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "windows-control": {
+      "command": "python",
+      "args": ["-B", "mcp-servers/windows_mcp_server.py"],
+      "env": {
+        "GODMODE": "true",
+        "ADMIN_MODE": "true",
+        "LOG_LEVEL": "INFO",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      }
+    }
+  }
+}

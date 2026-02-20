@@ -1,0 +1,81 @@
+{
+  "$schema": "https://docs.openclaw.ai/config-schema.json",
+  "$comment": "Add these settings to your openclaw.json to enable the 22 MCP tools",
+  
+  "agents": {
+    "defaults": {
+      "cliBackends": {
+        "mcp": {
+          "$comment": "Wrapper for 22 MCP tools (Windows MCP + WhatsApp Bridge)",
+          "command": "python",
+          "args": ["C:/Users/sgarm/openclaw-repos/openclaw/mcp-servers/mcp-cli-tool.py"],
+          "output": "json",
+          "input": "stdin",
+          "env": {
+            "PYTHONPATH": "C:/Users/sgarm/openclaw-repos/openclaw/mcp-servers"
+          },
+          "serialize": false
+        }
+      },
+      
+      "models": {
+        "$comment": "Optional: Configure aliases for common MCP tools",
+        "mcp:windows-snapshot": {
+          "alias": "take-screenshot",
+          "params": {
+            "use_vision": true
+          }
+        },
+        "mcp:windows-shell": {
+          "alias": "run-command"
+        }
+      }
+    }
+  },
+
+  "tools": {
+    "allow": [
+      "read",
+      "write",
+      "edit",
+      "exec",
+      "web_search",
+      "web_fetch"
+    ],
+    "alsoAllow": [
+      "mcp"
+    ]
+  },
+
+  "$comment_about_mcp_tools": {
+    "description": "These 22 tools are now available:",
+    "windows_mcp": {
+      "count": 21,
+      "examples": [
+        "windows-mcp-snapshot - Take screenshots",
+        "windows-mcp-shell - Run PowerShell commands",
+        "windows-mcp-click - Click at screen coordinates",
+        "windows-mcp-type - Type text",
+        "windows-mcp-scroll - Scroll screen",
+        "windows-mcp-vision - OCR and image analysis",
+        "... and 15 more Windows system tools"
+      ]
+    },
+    "whatsapp_bridge": {
+      "count": 3,
+      "examples": [
+        "whatsapp-log-message - Log events",
+        "whatsapp-bridge-health - Check status",
+        "whatsapp-send-log - Send message logs"
+      ]
+    }
+  },
+
+  "$integration_instructions": {
+    "step_1_merge_config": "Copy the 'agents.defaults.cliBackends.mcp' section to your openclaw.json",
+    "step_2_update_paths": "Update the Python path to match your installation",
+    "step_3_restart_gateway": "Run: openclaw gateway restart",
+    "step_4_verify": "Test with: python mcp-cli-tool.py status",
+    "step_5_use_tools": "Your agent can now call any MCP tool directly"
+  }
+}

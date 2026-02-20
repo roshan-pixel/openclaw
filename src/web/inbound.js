@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.monitorWebInbox = exports.extractText = exports.extractMediaPlaceholder = exports.extractLocationData = exports.resetWebInboundDedupe = void 0;
+var dedupe_js_1 = require("./inbound/dedupe.js");
+Object.defineProperty(exports, "resetWebInboundDedupe", { enumerable: true, get: function () { return dedupe_js_1.resetWebInboundDedupe; } });
+var extract_js_1 = require("./inbound/extract.js");
+Object.defineProperty(exports, "extractLocationData", { enumerable: true, get: function () { return extract_js_1.extractLocationData; } });
+Object.defineProperty(exports, "extractMediaPlaceholder", { enumerable: true, get: function () { return extract_js_1.extractMediaPlaceholder; } });
+Object.defineProperty(exports, "extractText", { enumerable: true, get: function () { return extract_js_1.extractText; } });
+var monitor_js_1 = require("./inbound/monitor.js");
+Object.defineProperty(exports, "monitorWebInbox", { enumerable: true, get: function () { return monitor_js_1.monitorWebInbox; } });

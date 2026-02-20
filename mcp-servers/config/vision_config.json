@@ -1,0 +1,15 @@
+{
+  "enabled": true,
+  "credentials_path": "C:\\Users\\sgarm\\openclaw-repos\\openclaw\\keys\\vision-key.json",
+  "project_id": "openclaw-vision-487213",
+  "features": [
+    "LABEL_DETECTION",
+    "TEXT_DETECTION",
+    "OBJECT_LOCALIZATION",
+    "FACE_DETECTION"
+  ],
+  "max_results": 50,
+  "cache_enabled": true,
+  "cache_ttl_seconds": 300,
+  "fallback_to_basic": true
+}

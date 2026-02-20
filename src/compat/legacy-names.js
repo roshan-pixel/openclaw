@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.LEGACY_MACOS_APP_SOURCES_DIRS = exports.MACOS_APP_SOURCES_DIR = exports.LEGACY_CANVAS_HANDLER_NAMES = exports.LEGACY_PLUGIN_MANIFEST_FILENAMES = exports.LEGACY_MANIFEST_KEYS = exports.MANIFEST_KEY = exports.LEGACY_PROJECT_NAMES = exports.PROJECT_NAME = void 0;
+exports.PROJECT_NAME = "openclaw";
+exports.LEGACY_PROJECT_NAMES = [];
+exports.MANIFEST_KEY = exports.PROJECT_NAME;
+exports.LEGACY_MANIFEST_KEYS = exports.LEGACY_PROJECT_NAMES;
+exports.LEGACY_PLUGIN_MANIFEST_FILENAMES = [];
+exports.LEGACY_CANVAS_HANDLER_NAMES = [];
+exports.MACOS_APP_SOURCES_DIR = "apps/macos/Sources/OpenClaw";
+exports.LEGACY_MACOS_APP_SOURCES_DIRS = [];

@@ -1,0 +1,63 @@
+﻿# ===========================
+# SECRETS & CREDENTIALS
+# ===========================
+.env
+*.env
+.env.local
+.env.production
+
+# ===========================
+# PERSONAL / LOCAL DATA
+# ===========================
+conversations/
+logs/
+*.log
+filelist.txt
+
+# ===========================
+# PYTHON
+# ===========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+
+# ===========================
+# NODE / JS
+# ===========================
+node_modules/
+npm-debug.log*
+
+# ===========================
+# SCREENSHOTS & IMAGES
+# ===========================
+test_vision_analysis.png
+test_vision_screenshot.png
+
+# ===========================
+# BACKUPS & DUPLICATES
+# ===========================
+*.backup
+*.backup_*
+*.bak
+openclaw_enhanced_gateway_FIXED.py
+openclaw_enhanced_gateway_PERMANENT.py
+openclaw_enhanced_gateway_ULTIMATE.py
+openclaw_gateway_backup.py
+windows_mcp_server_backup.py
+windows_mcp_server_ultraclean.py
+snapshot_tool_backup.py
+
+# ===========================
+# BINARIES & INSTALLERS
+# ===========================
+*.exe
+*.msi
+
+# ===========================
+# TEMP / MISC
+# ===========================
+filelist.txt
