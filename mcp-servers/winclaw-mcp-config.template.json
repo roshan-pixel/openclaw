@@ -1,6 +1,6 @@
 ﻿{
-  "$schema": "https://docs.openclaw.ai/config-schema.json",
-  "$comment": "Copy this to openclaw-mcp-config.json and replace <YOUR_ABSOLUTE_PATH>",
+  "$schema": "https://docs.winclaw.ai/config-schema.json",
+  "$comment": "Copy this to winclaw-mcp-config.json and replace <YOUR_ABSOLUTE_PATH>",
   "agents": {
     "defaults": {
       "cliBackends": {
