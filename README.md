@@ -120,13 +120,13 @@ All core WinClaw files live under `mcp-servers/`.
 
 ## Prerequisites
 
-| Tool | Version | Why Needed | Download |
-| :--- | :--- | :--- | :--- |
-| **Python** | 3.10+ | Runs all .py files | [python.org](https://www.python.org/) |
-| **Node.js** | 18+ | For .mjs MCP server | [nodejs.org](https://nodejs.org/) |
-| **Git** | Any | To clone the repo | [git-scm.com](https://git-scm.com/) |
-| **Anthropic Key** | - | Powers Claude AI | [console.anthropic.com](https://console.anthropic.com/) |
-| **Ollama** | Optional | Run local LLMs | [ollama.ai](https://ollama.ai/) |
+| Tool              | Version  | Why Needed          | Download                                                |
+| :---------------- | :------- | :------------------ | :------------------------------------------------------ |
+| **Python**        | 3.10+    | Runs all .py files  | [python.org](https://www.python.org/)                   |
+| **Node.js**       | 18+      | For .mjs MCP server | [nodejs.org](https://nodejs.org/)                       |
+| **Git**           | Any      | To clone the repo   | [git-scm.com](https://git-scm.com/)                     |
+| **Anthropic Key** | -        | Powers Claude AI    | [console.anthropic.com](https://console.anthropic.com/) |
+| **Ollama**        | Optional | Run local LLMs      | [ollama.ai](https://ollama.ai/)                         |
 
 ---
 
