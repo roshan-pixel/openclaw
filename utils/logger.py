@@ -26,3 +26,7 @@ def setup_logger(name: str, level: int = logging.INFO) -> logging.Logger:
     
     return logger
 
+
+def get_logger(name: str, level: int = logging.INFO) -> logging.Logger:
+    """Return (or create) a named logger. Alias for setup_logger."""
+    return setup_logger(name, level)

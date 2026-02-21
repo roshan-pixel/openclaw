@@ -9,14 +9,18 @@ Full integration with ALL advanced systems:
 - Sentient Conversation Engine (Human-like personality)
 """
 
-from fastapi import FastAPI, HTTPException, Depends, Security
+from fastapi import FastAPI, HTTPException, Depends, Security, Request
 from fastapi.security import APIKeyHeader
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.responses import Response
 from typing import Optional, Dict, Any, List
 import logging
 import os
 import sys
+import time
+from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
 import uvicorn
@@ -110,21 +114,28 @@ except Exception as e:
 # ============================================================
 # CONFIG
 # ============================================================
-_raw_api_keys = os.environ.get("WinClaw_API_KEYS", "")
-if not _raw_api_keys:
+_raw_keys = os.environ.get("WinClaw_API_KEYS", "").strip()
+if not _raw_keys:
     raise RuntimeError(
         "WinClaw_API_KEYS environment variable is not set. "
-        "Set it to a comma-separated list of API keys before starting the gateway."
+        "Set it to a comma-separated list of strong API keys before starting the gateway."
     )
-VALID_API_KEYS = set(k.strip() for k in _raw_api_keys.split(",") if k.strip())
-if not VALID_API_KEYS:
-    raise RuntimeError(
-        "WinClaw_API_KEYS contains no valid (non-whitespace) keys. "
-        "Provide at least one key."
-    )
+VALID_API_KEYS = set(k.strip() for k in _raw_keys.split(",") if k.strip())
 
-# WhatsApp bridge / local LLM endpoint — override via WHATSAPP_BRIDGE_URL env var
-WHATSAPP_BRIDGE_URL = os.environ.get("WHATSAPP_BRIDGE_URL", "http://localhost:18788")
+# Allowed CORS origins – default to localhost only; override via env var
+_cors_origins_env = os.environ.get("WinClaw_CORS_ORIGINS", "").strip()
+CORS_ORIGINS: List[str] = (
+    [o.strip() for o in _cors_origins_env.split(",") if o.strip()]
+    if _cors_origins_env
+    else ["http://localhost", "http://127.0.0.1"]
+)
+
+# Request-size cap (bytes). Default 5 MB; override via WinClaw_MAX_REQUEST_BYTES.
+MAX_REQUEST_BYTES: int = int(os.environ.get("WinClaw_MAX_REQUEST_BYTES", str(5 * 1024 * 1024)))
+
+# Rate-limit: requests per window per IP. Defaults: 60 requests / 60 s.
+RATE_LIMIT_REQUESTS: int = int(os.environ.get("WinClaw_RATE_LIMIT_REQUESTS", "60"))
+RATE_LIMIT_WINDOW: int = int(os.environ.get("WinClaw_RATE_LIMIT_WINDOW", "60"))
 
 # Global instances
 mcp_manager: Optional[MCPManager] = None
@@ -419,11 +430,46 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost", "http://localhost:8000", "http://127.0.0.1", "http://127.0.0.1:8000"],
+    allow_origins=CORS_ORIGINS,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST"],
+    allow_headers=["X-API-Key", "Content-Type"],
 )
+
+# ── Request-size guard ────────────────────────────────────────────────────────
+
+class RequestSizeLimitMiddleware(BaseHTTPMiddleware):
+    """Reject requests whose body exceeds MAX_REQUEST_BYTES."""
+    async def dispatch(self, request: Request, call_next):
+        content_length = request.headers.get("content-length")
+        if content_length and int(content_length) > MAX_REQUEST_BYTES:
+            return Response(
+                content=f"Request body too large (max {MAX_REQUEST_BYTES} bytes)",
+                status_code=413,
+            )
+        return await call_next(request)
+
+app.add_middleware(RequestSizeLimitMiddleware)
+
+# ── Rate limiter ──────────────────────────────────────────────────────────────
+
+_rate_counters: Dict[str, List[float]] = defaultdict(list)
+
+class RateLimitMiddleware(BaseHTTPMiddleware):
+    """Simple in-process sliding-window rate limiter by client IP."""
+    async def dispatch(self, request: Request, call_next):
+        client_ip = request.client.host if request.client else "unknown"
+        now = time.monotonic()
+        window_start = now - RATE_LIMIT_WINDOW
+        hits = _rate_counters[client_ip]
+        # Purge old entries
+        _rate_counters[client_ip] = [t for t in hits if t > window_start]
+        if len(_rate_counters[client_ip]) >= RATE_LIMIT_REQUESTS:
+            return Response(content="Rate limit exceeded", status_code=429)
+        _rate_counters[client_ip].append(now)
+        return await call_next(request)
+
+app.add_middleware(RateLimitMiddleware)
 
 # ============================================================
 # AUTH
@@ -833,14 +879,14 @@ if __name__ == "__main__":
     print("\n" + "="*70)
     print("🔥 WinClaw GATEWAY v4.0 - ULTIMATE GOD MODE 🔥")
     print("="*70)
-    print("Starting server on http://0.0.0.0:8000")
+    print("Starting server on http://127.0.0.1:8000  (localhost only)")
     print("API Docs: http://localhost:8000/docs")
     print("="*70 + "\n")
 
     uvicorn.run(
-        "WinClaw_gateway:app",
-        host="0.0.0.0",
-        port=8000,
+        "winclaw_gateway:app",
+        host=os.environ.get("WinClaw_BIND_HOST", "127.0.0.1"),
+        port=int(os.environ.get("WinClaw_PORT", "8000")),
         reload=False,
         log_level="info"
     )

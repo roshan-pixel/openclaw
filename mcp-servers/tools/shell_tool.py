@@ -2,6 +2,8 @@
 Shell Tool - Executes shell commands
 """
 
+import os
+import re
 import subprocess
 from typing import Sequence
 from mcp.types import Tool, TextContent, ImageContent, EmbeddedResource
@@ -13,12 +15,25 @@ from utils.admin import check_admin_privileges
 
 logger = get_logger("shell_tool")
 
+# Patterns that are considered destructive when SHELL_REQUIRE_CONFIRM=true.
+_DESTRUCTIVE_PATTERNS = re.compile(
+    r"\b(Remove-Item|del\b|rd\b|rmdir|format|reg\s+delete|Stop-Service|"
+    r"sc\s+delete|net\s+user|shutdown|restart-computer)\b",
+    re.IGNORECASE,
+)
+
+# Set SHELL_REQUIRE_CONFIRM=true in the environment to require explicit opt-in
+# for commands that match the destructive pattern.
+_REQUIRE_CONFIRM = os.environ.get("SHELL_REQUIRE_CONFIRM", "false").lower() == "true"
+
+
 class ShellTool(BaseTool):
     def __init__(self):
         super().__init__(
             name="Windows-MCP:Shell",
             description="Executes shell commands via PowerShell or CMD. "
-                       "Returns stdout, stderr, and exit code."
+                       "Returns stdout, stderr, and exit code. "
+                       "Pass confirmed=true for commands that modify or delete system state."
         )
     
     def get_tool_definition(self) -> Tool:
@@ -48,7 +63,7 @@ class ShellTool(BaseTool):
                     "confirmed": {
                         "type": "boolean",
                         "default": False,
-                        "description": "Set to true to confirm you intend to execute this command. Required acknowledgement for shell execution."
+                        "description": "Set to true to acknowledge that the command is destructive"
                     }
                 },
                 "required": ["command", "confirmed"]
@@ -66,6 +81,20 @@ class ShellTool(BaseTool):
         command = arguments["command"]
         shell = arguments.get("shell", "powershell")
         timeout = arguments.get("timeout", 30)
+        confirmed = bool(arguments.get("confirmed", False))
+
+        # Guard: when confirmation mode is active, block destructive commands
+        # unless the caller explicitly passed confirmed=true.
+        if _REQUIRE_CONFIRM and not confirmed and _DESTRUCTIVE_PATTERNS.search(command):
+            logger.warning(f"Blocked potentially destructive command (not confirmed): {command}")
+            return [TextContent(
+                type="text",
+                text=(
+                    "BLOCKED: This command matches a destructive pattern. "
+                    "Re-invoke with confirmed=true to proceed.\n"
+                    f"Command: {command}"
+                )
+            )]
         
         try:
             is_admin = check_admin_privileges()

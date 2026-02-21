@@ -126,3 +126,62 @@ Run locally:
 pip install detect-secrets==1.5.0
 detect-secrets scan --baseline .secrets.baseline
 ```
+
+## WinClaw Windows MCP Extension
+
+The `mcp-servers/` and `extensions/windows-mcp/` components provide high-privilege Windows automation through the MCP protocol. The following security properties must be maintained at all times.
+
+### Gateway Authentication
+
+- **`WinClaw_API_KEYS`** (required): set to a comma-separated list of strong, randomly generated API keys before starting the gateway. The gateway refuses to start if this variable is absent or empty.
+- Keys are validated on every request via the `X-API-Key` header.
+- Minimum recommended key length: 32 random characters (e.g. `python -c "import secrets; print(secrets.token_hex(32))"`).
+
+### Network Exposure
+
+- The gateway binds to **`127.0.0.1`** by default. This is intentional — it is a trusted-operator tool, not a multi-user service.
+- Override with `WinClaw_BIND_HOST` only if you understand the implications (LAN + firewall rules, or Tailscale/SSH tunnel).
+- Do **not** expose port 8000 to the public internet.
+
+### CORS Policy
+
+- CORS defaults to `http://localhost` and `http://127.0.0.1` only.
+- Override with `WinClaw_CORS_ORIGINS` (comma-separated) when necessary.
+- Never set to `*` on a machine with network-visible access.
+
+### Request Limits
+
+| Control | Env var | Default |
+|---------|---------|---------|
+| Request body cap | `WinClaw_MAX_REQUEST_BYTES` | 5 MB |
+| Rate limit (requests/window) | `WinClaw_RATE_LIMIT_REQUESTS` | 60 |
+| Rate limit window (seconds) | `WinClaw_RATE_LIMIT_WINDOW` | 60 |
+
+### Shell / Destructive Command Guard
+
+The `Windows-MCP:Shell` tool accepts a `confirmed` boolean argument. When the environment variable `SHELL_REQUIRE_CONFIRM=true` is set:
+
+- Commands matching destructive patterns (e.g. `Remove-Item`, `del`, `format`, `shutdown`) are **blocked** unless the caller passes `confirmed=true`.
+- This is an explicit acknowledgement mechanism — it does not restrict what commands can run, but it ensures the LLM/operator consciously opt in to destructive actions.
+
+### Credential Management
+
+- **Never** commit `.env` or `.env.backup` to version control. Both are in `.gitignore`.
+- Rotate any credential that was previously exposed in git history immediately.
+- Use `.env.example` as the only committed template.
+
+### Admin Elevation
+
+- `run_godmode.py` requests UAC elevation via `ShellExecute runas`. The UAC dialog is **always shown** — elevation is never silent.
+- The `GODMODE` env var is `false` by default and must be explicitly set.
+
+### Threat Model
+
+WinClaw is a **trusted-operator tool**. The assumed deployment is:
+
+- Single machine, single operator.
+- Gateway reachable only from localhost (or explicitly configured LAN/VPN).
+- The operator fully trusts the LLM responses driving automation.
+
+It is **not** designed to be exposed to untrusted users or the public internet.
+

@@ -247,3 +247,92 @@ WhatsApp: ✓ linked, connected
     "whatsapp": {
       "groupPolicy": "allowlist",
       "allowFrom": ["91987654
+
+---
+
+## ✅ Windows Validation Checklist (Clean-Machine)
+
+Use this checklist to verify a fresh WinClaw installation on Windows 10/11.
+Each item has an explicit **PASS** / **FAIL** signal.
+
+### Prerequisites
+
+| # | Check | Command | PASS signal | FAIL signal |
+|---|-------|---------|-------------|-------------|
+| 1 | Python 3.10+ installed | `python --version` | `Python 3.1x.x` | "not recognized" → install from python.org |
+| 2 | pip available | `pip --version` | version printed | install pip or use `py -m pip` |
+| 3 | Node.js 20+ installed | `node --version` | `v20.x.x` or higher | "not recognized" → install from nodejs.org |
+| 4 | `WinClaw_API_KEYS` env var set | `echo %WinClaw_API_KEYS%` | non-empty value | empty → set it before starting gateway |
+
+### Python virtualenv setup
+
+```powershell
+# Create and activate venv
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+
+# Install dependencies
+pip install -r mcp-servers\requirements.txt
+```
+
+**PASS**: `pip install` completes without errors.  
+**FAIL**: missing package errors → upgrade pip (`pip install --upgrade pip`) and retry.
+
+### MCP stdio handshake
+
+```powershell
+# Run the minimal MCP server in a separate terminal
+python mcp-servers\test_mcp_minimal.py
+```
+
+**PASS**: process stays running and prints `MCP server started`.  
+**FAIL**: `ModuleNotFoundError: mcp` → `pip install mcp` in the venv.
+
+### Claude Desktop connection
+
+1. Open `mcp-servers\winclaw-mcp-config.template.json`, copy to `winclaw-mcp-config.json`, and fill in:
+   - `pythonPath` — output of `where python` (inside venv)
+   - `apiKey` — value of `WinClaw_API_KEYS`
+2. Set `WinClaw_API_KEYS` in your environment and start the gateway:
+   ```powershell
+   $env:WinClaw_API_KEYS="<your-key>"
+   python mcp-servers\winclaw_gateway.py
+   ```
+3. Copy `winclaw-mcp-config.json` to Claude Desktop's MCP config directory.
+4. Restart Claude Desktop.
+
+**PASS**: Claude Desktop shows WinClaw tools in the tool list.  
+**FAIL**: check `logs\gateway_ultimate.log` for startup errors.
+
+### Screenshot tool (Snapshot)
+
+In Claude Desktop: ask *"Take a screenshot"*.
+
+**PASS**: screenshot image appears in the chat.  
+**FAIL**: `PIL` import error → `pip install Pillow`; `pyautogui` error → `pip install pyautogui`.
+
+### Shell tool
+
+In Claude Desktop: ask *"Run `echo hello` in PowerShell"*.
+
+**PASS**: response contains `STDOUT: hello`.  
+**FAIL**: `subprocess` error or timeout → check PowerShell execution policy (`Set-ExecutionPolicy RemoteSigned`).
+
+### Admin elevation path
+
+1. Right-click Command Prompt / PowerShell → **Run as administrator**.
+2. Run `python run_godmode.py` — UAC prompt must appear first.
+3. After accepting, the script reports `GODMODE ACTIVE`.
+
+**PASS**: UAC dialog is shown before elevation; `GODMODE ACTIVE` printed after.  
+**FAIL**: elevation happens silently without UAC → OS policy or script issue; investigate immediately.
+
+### Smoke tests (no Windows required)
+
+```powershell
+pip install pytest
+pytest mcp-servers\test_smoke.py -v
+```
+
+**PASS**: all 16 tests pass.  
+**FAIL**: see error output; most failures indicate missing env vars or modified source files.
