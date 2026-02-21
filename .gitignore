@@ -106,7 +106,8 @@ structure.txt
 
 # Sensitive keys
 keys/
-**/*.json
-!package.json
-!tsconfig.json
+**/*credentials*.json
+**/service-account*.json
+**/*-key.json
+**/*-secret.json
 logs/
