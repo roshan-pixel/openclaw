@@ -68,7 +68,10 @@ class EnhancedAgent:
             "conversation": {
                 "storage_dir": "conversations",
                 "max_sessions": 100,
-                "session_timeout_hours": 24
+                "session_timeout_hours": 24,
+                # Keep context budget small to prevent screenshot-heavy histories
+                # from flooding the LLM with tokens.
+                "context_max_tokens": 8000
             },
             "orchestrator": {
                 "max_parallel_tasks": 5,
@@ -256,7 +259,7 @@ class EnhancedAgent:
         """
         # Get conversation history
         if max_context_tokens is None:
-            max_context_tokens = self.config.get("conversation", {}).get("context_max_tokens", 100000)
+            max_context_tokens = self.config.get("conversation", {}).get("context_max_tokens", 8000)
         
         messages = self.conversation_manager.get_messages_for_api(
             session_id,

@@ -50,37 +50,67 @@ class ConversationSession:
         """Get the most recent N messages."""
         return self.messages[-count:] if self.messages else []
     
-    def get_messages_for_api(self, max_tokens: int = 100000) -> List[Dict]:
+    def get_messages_for_api(
+        self, max_tokens: int = 8000, max_messages: int = 10
+    ) -> List[Dict]:
         """
         Get messages formatted for Claude API with token optimization.
-        Returns messages that fit within token budget.
+
+        Returns at most *max_messages* recent messages that together fit inside
+        *max_tokens*.  The conservative defaults avoid re-sending large image
+        blobs that accumulated in earlier turns and blowing up the context.
+
+        Token estimation: 1 token ≈ 4 characters (rough but good enough for
+        budget enforcement).
         """
-        # Rough estimation: 1 token ≈ 4 characters
         messages_for_api = []
         current_tokens = 0
-        
-        # Iterate from most recent to oldest
+
+        # Iterate from most recent to oldest, honour both caps.
         for msg in reversed(self.messages):
-            # Estimate tokens for this message
-            msg_text = str(msg.get("content", ""))
-            estimated_tokens = len(msg_text) // 4
-            
+            if len(messages_for_api) >= max_messages:
+                break
+
+            # For token estimation, use only the textual parts of content so
+            # that base64 image blobs stored in history don't inflate the count
+            # or sneak large payloads back into the context.
+            content = msg.get("content", "")
+            if isinstance(content, list):
+                # Multi-part content (e.g. tool results with image blocks).
+                # Keep only text parts for both estimation and the API payload.
+                # If there are no text parts, use an empty list rather than
+                # falling back to the full content (which may contain large
+                # base64 image blobs that would defeat the token budget).
+                text_parts = [
+                    part for part in content
+                    if isinstance(part, dict) and part.get("type") == "text"
+                ]
+                content_for_api = text_parts  # empty list is fine; no blobs
+                estimate_text = " ".join(p.get("text", "") for p in text_parts)
+            else:
+                content_for_api = content
+                estimate_text = str(content)
+
+            estimated_tokens = len(estimate_text) // 4
+
             if current_tokens + estimated_tokens > max_tokens:
                 break
-            
-            # Format for API (remove timestamp, keep essentials)
+
             api_msg = {
                 "role": msg["role"],
-                "content": msg["content"]
+                "content": content_for_api,
             }
-            
+
             if msg.get("tool_calls"):
                 api_msg["tool_calls"] = msg["tool_calls"]
-            
+
             messages_for_api.insert(0, api_msg)
             current_tokens += estimated_tokens
-        
-        logger.debug(f"Session {self.session_id}: {len(messages_for_api)} messages (~{current_tokens} tokens)")
+
+        logger.debug(
+            f"Session {self.session_id}: {len(messages_for_api)} messages "
+            f"(~{current_tokens} tokens)"
+        )
         return messages_for_api
     
     def summarize(self) -> Dict[str, Any]:
@@ -212,14 +242,19 @@ class ConversationManager:
         self._save_session(session)
         return True
     
-    def get_messages_for_api(self, session_id: str, max_tokens: int = 100000) -> List[Dict]:
+    def get_messages_for_api(
+        self,
+        session_id: str,
+        max_tokens: int = 8000,
+        max_messages: int = 10,
+    ) -> List[Dict]:
         """Get messages formatted for Claude API."""
         session = self.get_session(session_id)
-        
+
         if not session:
             return []
-        
-        return session.get_messages_for_api(max_tokens)
+
+        return session.get_messages_for_api(max_tokens, max_messages)
     
     def delete_session(self, session_id: str) -> bool:
         """Delete a conversation session."""
