@@ -19,6 +19,7 @@ The fastest way to enable the 22 tools is to:
 ### Option 2: Full Integration - MCP Plugin (For Production)
 
 Create an official OpenClaw plugin that:
+
 - Auto-discovers and loads MCP servers
 - Exposes all MCP tools as native OpenClaw tools
 - Handles stdio communication automatically
@@ -95,7 +96,7 @@ import json
 class MCPToolWrapper:
     def __init__(self, mcp_process):
         self.proc = mcp_process
-    
+
     def call_tool(self, tool_name, args):
         """Call a tool on the running MCP server"""
         request = {
@@ -150,7 +151,7 @@ class OpenClawMCPGateway:
     def __init__(self):
         self.servers = {}
         self.tools = {}
-    
+
     def register_mcp_server(self, name: str, startup_cmd: List[str]):
         """Register an MCP server"""
         client = Client(name, startup_cmd)
@@ -159,7 +160,7 @@ class OpenClawMCPGateway:
         tools = client.list_tools()
         for tool in tools:
             self.tools[tool['name']] = (name, tool)
-    
+
     def execute_mcp_tool(self, tool_name: str, args: dict):
         """Execute a tool through its MCP server"""
         server_name, tool_def = self.tools[tool_name]
@@ -179,6 +180,7 @@ Then register it with OpenClaw's tool system.
 ## Next Steps
 
 1. **Verify MCP servers work independently**
+
    ```bash
    python windows_mcp_server.py
    ```
@@ -194,6 +196,7 @@ Then register it with OpenClaw's tool system.
 ## Support
 
 If you get stuck, verify:
+
 - Are your MCP servers exporting tool definitions via `tools/list` method?
 - Can you manually call a tool via the JSON-RPC protocol?
 - Is OpenClaw's gateway able to execute `exec` commands? (This is your entry point)

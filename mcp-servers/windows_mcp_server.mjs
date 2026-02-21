@@ -1,9 +1,9 @@
 #!/usr/bin/env node
+import { execSync, exec } from "child_process";
+import { promisify } from "util";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js";
-import { execSync, exec } from "child_process";
-import { promisify } from "util";
 
 const execAsync = promisify(exec);
 
@@ -13,7 +13,7 @@ function runPowerShell(command, timeoutMs = 10000) {
   try {
     const result = execSync(
       `powershell.exe -NoProfile -NonInteractive -Command "${command.replace(/"/g, '\\"')}"`,
-      { timeout: timeoutMs, encoding: "utf8" }
+      { timeout: timeoutMs, encoding: "utf8" },
     );
     return { success: true, output: result.trim() };
   } catch (err) {
@@ -25,7 +25,7 @@ async function runPowerShellAsync(command, timeoutMs = 30000) {
   try {
     const { stdout, stderr } = await execAsync(
       `powershell.exe -NoProfile -NonInteractive -Command "${command.replace(/"/g, '\\"')}"`,
-      { timeout: timeoutMs, encoding: "utf8" }
+      { timeout: timeoutMs, encoding: "utf8" },
     );
     return { success: true, output: (stdout + stderr).trim() };
   } catch (err) {
@@ -43,10 +43,13 @@ function runPython(script) {
   ];
   for (const py of pythonPaths) {
     try {
-      const result = execSync(`"${py}" -c "${script.replace(/\\/g, "\\\\").replace(/"/g, '\\"')}"`, {
-        timeout: 10000,
-        encoding: "utf8",
-      });
+      const result = execSync(
+        `"${py}" -c "${script.replace(/\\/g, "\\\\").replace(/"/g, '\\"')}"`,
+        {
+          timeout: 10000,
+          encoding: "utf8",
+        },
+      );
       return { success: true, output: result.trim() };
     } catch (err) {
       if (!err.message.includes("not recognized") && !err.message.includes("No such file")) {
@@ -225,7 +228,8 @@ async function handleShell({ command, timeout = 30 }) {
 }
 
 function handleSnapshot({ use_vision = false }) {
-  const res = runPowerShell(`
+  const res = runPowerShell(
+    `
     Write-Output "=== OPEN WINDOWS ==="
     Get-Process | Where-Object { $_.MainWindowTitle -ne '' } |
       ForEach-Object { "  PID:$($_.Id) | $($_.ProcessName) | $($_.MainWindowTitle)" }
@@ -239,13 +243,15 @@ function handleSnapshot({ use_vision = false }) {
     $sb = New-Object System.Text.StringBuilder 256
     [FG.FG]::GetWindowText([FG.FG]::GetForegroundWindow(), $sb, 256) | Out-Null
     "  $($sb.ToString())"
-  `, 15000);
+  `,
+    15000,
+  );
 
   let output = res.output;
 
   if (use_vision) {
     const pyRes = runPython(
-      "import base64,io; from PIL import ImageGrab; img=ImageGrab.grab(); buf=io.BytesIO(); img.save(buf,format='PNG'); print(base64.b64encode(buf.getvalue()).decode())"
+      "import base64,io; from PIL import ImageGrab; img=ImageGrab.grab(); buf=io.BytesIO(); img.save(buf,format='PNG'); print(base64.b64encode(buf.getvalue()).decode())",
     );
     output += pyRes.success
       ? `\n\n=== SCREENSHOT (base64 PNG) ===\n${pyRes.output}`
@@ -256,7 +262,7 @@ function handleSnapshot({ use_vision = false }) {
 
 function handleClick({ loc, button = "left", clicks = 1 }) {
   const res = runPython(
-    `import pyautogui; pyautogui.FAILSAFE=False; pyautogui.click(${loc[0]},${loc[1]},clicks=${clicks},button='${button}',interval=0.1); print('Clicked ${button} x${clicks} at (${loc[0]},${loc[1]})')`
+    `import pyautogui; pyautogui.FAILSAFE=False; pyautogui.click(${loc[0]},${loc[1]},clicks=${clicks},button='${button}',interval=0.1); print('Clicked ${button} x${clicks} at (${loc[0]},${loc[1]})')`,
   );
   return res.success ? res.output : `Click failed: ${res.output}`;
 }
@@ -283,7 +289,7 @@ function handleScroll({ loc, direction = "down", wheel_times = 3 }) {
   const amount = ["up", "left"].includes(direction) ? wheel_times : -wheel_times;
   const moveCmd = loc ? `pyautogui.moveTo(${loc[0]},${loc[1]});` : "";
   const res = runPython(
-    `import pyautogui; pyautogui.FAILSAFE=False; ${moveCmd} pyautogui.scroll(${amount}); print('Scrolled ${direction} x${wheel_times}')`
+    `import pyautogui; pyautogui.FAILSAFE=False; ${moveCmd} pyautogui.scroll(${amount}); print('Scrolled ${direction} x${wheel_times}')`,
   );
   return res.success ? res.output : `Scroll failed: ${res.output}`;
 }
@@ -297,9 +303,12 @@ function handleMove({ loc, drag = false }) {
 }
 
 function handleShortcut({ shortcut }) {
-  const keys = shortcut.split("+").map((k) => `'${k.trim().toLowerCase()}'`).join(",");
+  const keys = shortcut
+    .split("+")
+    .map((k) => `'${k.trim().toLowerCase()}'`)
+    .join(",");
   const res = runPython(
-    `import pyautogui; pyautogui.FAILSAFE=False; pyautogui.hotkey(${keys}); print('Pressed: ${shortcut}')`
+    `import pyautogui; pyautogui.FAILSAFE=False; pyautogui.hotkey(${keys}); print('Pressed: ${shortcut}')`,
   );
   return res.success ? res.output : `Shortcut failed: ${res.output}`;
 }
@@ -333,7 +342,7 @@ async function handleScrape({ url }) {
 
 const server = new Server(
   { name: "windows-mcp", version: "1.0.0" },
-  { capabilities: { tools: {} } }
+  { capabilities: { tools: {} } },
 );
 
 server.setRequestHandler(ListToolsRequestSchema, async () => ({ tools: TOOLS }));
@@ -343,17 +352,38 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   let result;
   try {
     switch (name) {
-      case "Windows-MCP:App":      result = await handleApp(args); break;
-      case "Windows-MCP:Shell":    result = await handleShell(args); break;
-      case "Windows-MCP:Snapshot": result = handleSnapshot(args); break;
-      case "Windows-MCP:Click":    result = handleClick(args); break;
-      case "Windows-MCP:Type":     result = handleType(args); break;
-      case "Windows-MCP:Scroll":   result = handleScroll(args); break;
-      case "Windows-MCP:Move":     result = handleMove(args); break;
-      case "Windows-MCP:Shortcut": result = handleShortcut(args); break;
-      case "Windows-MCP:Wait":     result = await handleWait(args); break;
-      case "Windows-MCP:Scrape":   result = await handleScrape(args); break;
-      default: result = `Unknown tool: ${name}`;
+      case "Windows-MCP:App":
+        result = await handleApp(args);
+        break;
+      case "Windows-MCP:Shell":
+        result = await handleShell(args);
+        break;
+      case "Windows-MCP:Snapshot":
+        result = handleSnapshot(args);
+        break;
+      case "Windows-MCP:Click":
+        result = handleClick(args);
+        break;
+      case "Windows-MCP:Type":
+        result = handleType(args);
+        break;
+      case "Windows-MCP:Scroll":
+        result = handleScroll(args);
+        break;
+      case "Windows-MCP:Move":
+        result = handleMove(args);
+        break;
+      case "Windows-MCP:Shortcut":
+        result = handleShortcut(args);
+        break;
+      case "Windows-MCP:Wait":
+        result = await handleWait(args);
+        break;
+      case "Windows-MCP:Scrape":
+        result = await handleScrape(args);
+        break;
+      default:
+        result = `Unknown tool: ${name}`;
     }
   } catch (err) {
     result = `Error in ${name}: ${err.message}`;

@@ -4,72 +4,73 @@ exports.DEFAULT_CONTEXT_PRUNING_SETTINGS = void 0;
 exports.computeEffectiveSettings = computeEffectiveSettings;
 var parse_duration_js_1 = require("../../../cli/parse-duration.js");
 exports.DEFAULT_CONTEXT_PRUNING_SETTINGS = {
-    mode: "cache-ttl",
-    ttlMs: 5 * 60 * 1000,
-    keepLastAssistants: 3,
-    softTrimRatio: 0.3,
-    hardClearRatio: 0.5,
-    minPrunableToolChars: 50000,
-    tools: {},
-    softTrim: {
-        maxChars: 4000,
-        headChars: 1500,
-        tailChars: 1500,
-    },
-    hardClear: {
-        enabled: true,
-        placeholder: "[Old tool result content cleared]",
-    },
+  mode: "cache-ttl",
+  ttlMs: 5 * 60 * 1000,
+  keepLastAssistants: 3,
+  softTrimRatio: 0.3,
+  hardClearRatio: 0.5,
+  minPrunableToolChars: 50000,
+  tools: {},
+  softTrim: {
+    maxChars: 4000,
+    headChars: 1500,
+    tailChars: 1500,
+  },
+  hardClear: {
+    enabled: true,
+    placeholder: "[Old tool result content cleared]",
+  },
 };
 function computeEffectiveSettings(raw) {
-    if (!raw || typeof raw !== "object")
-        return null;
-    var cfg = raw;
-    if (cfg.mode !== "cache-ttl")
-        return null;
-    var s = structuredClone(exports.DEFAULT_CONTEXT_PRUNING_SETTINGS);
-    s.mode = cfg.mode;
-    if (typeof cfg.ttl === "string") {
-        try {
-            s.ttlMs = (0, parse_duration_js_1.parseDurationMs)(cfg.ttl, { defaultUnit: "m" });
-        }
-        catch (_a) {
-            // keep default ttl
-        }
+  if (!raw || typeof raw !== "object") {
+    return null;
+  }
+  var cfg = raw;
+  if (cfg.mode !== "cache-ttl") {
+    return null;
+  }
+  var s = structuredClone(exports.DEFAULT_CONTEXT_PRUNING_SETTINGS);
+  s.mode = cfg.mode;
+  if (typeof cfg.ttl === "string") {
+    try {
+      s.ttlMs = (0, parse_duration_js_1.parseDurationMs)(cfg.ttl, { defaultUnit: "m" });
+    } catch (_a) {
+      // keep default ttl
     }
-    if (typeof cfg.keepLastAssistants === "number" && Number.isFinite(cfg.keepLastAssistants)) {
-        s.keepLastAssistants = Math.max(0, Math.floor(cfg.keepLastAssistants));
+  }
+  if (typeof cfg.keepLastAssistants === "number" && Number.isFinite(cfg.keepLastAssistants)) {
+    s.keepLastAssistants = Math.max(0, Math.floor(cfg.keepLastAssistants));
+  }
+  if (typeof cfg.softTrimRatio === "number" && Number.isFinite(cfg.softTrimRatio)) {
+    s.softTrimRatio = Math.min(1, Math.max(0, cfg.softTrimRatio));
+  }
+  if (typeof cfg.hardClearRatio === "number" && Number.isFinite(cfg.hardClearRatio)) {
+    s.hardClearRatio = Math.min(1, Math.max(0, cfg.hardClearRatio));
+  }
+  if (typeof cfg.minPrunableToolChars === "number" && Number.isFinite(cfg.minPrunableToolChars)) {
+    s.minPrunableToolChars = Math.max(0, Math.floor(cfg.minPrunableToolChars));
+  }
+  if (cfg.tools) {
+    s.tools = cfg.tools;
+  }
+  if (cfg.softTrim) {
+    if (typeof cfg.softTrim.maxChars === "number" && Number.isFinite(cfg.softTrim.maxChars)) {
+      s.softTrim.maxChars = Math.max(0, Math.floor(cfg.softTrim.maxChars));
     }
-    if (typeof cfg.softTrimRatio === "number" && Number.isFinite(cfg.softTrimRatio)) {
-        s.softTrimRatio = Math.min(1, Math.max(0, cfg.softTrimRatio));
+    if (typeof cfg.softTrim.headChars === "number" && Number.isFinite(cfg.softTrim.headChars)) {
+      s.softTrim.headChars = Math.max(0, Math.floor(cfg.softTrim.headChars));
     }
-    if (typeof cfg.hardClearRatio === "number" && Number.isFinite(cfg.hardClearRatio)) {
-        s.hardClearRatio = Math.min(1, Math.max(0, cfg.hardClearRatio));
+    if (typeof cfg.softTrim.tailChars === "number" && Number.isFinite(cfg.softTrim.tailChars)) {
+      s.softTrim.tailChars = Math.max(0, Math.floor(cfg.softTrim.tailChars));
     }
-    if (typeof cfg.minPrunableToolChars === "number" && Number.isFinite(cfg.minPrunableToolChars)) {
-        s.minPrunableToolChars = Math.max(0, Math.floor(cfg.minPrunableToolChars));
+  }
+  if (cfg.hardClear) {
+    if (typeof cfg.hardClear.enabled === "boolean") {
+      s.hardClear.enabled = cfg.hardClear.enabled;
     }
-    if (cfg.tools) {
-        s.tools = cfg.tools;
+    if (typeof cfg.hardClear.placeholder === "string" && cfg.hardClear.placeholder.trim()) {
+      s.hardClear.placeholder = cfg.hardClear.placeholder.trim();
     }
-    if (cfg.softTrim) {
-        if (typeof cfg.softTrim.maxChars === "number" && Number.isFinite(cfg.softTrim.maxChars)) {
-            s.softTrim.maxChars = Math.max(0, Math.floor(cfg.softTrim.maxChars));
-        }
-        if (typeof cfg.softTrim.headChars === "number" && Number.isFinite(cfg.softTrim.headChars)) {
-            s.softTrim.headChars = Math.max(0, Math.floor(cfg.softTrim.headChars));
-        }
-        if (typeof cfg.softTrim.tailChars === "number" && Number.isFinite(cfg.softTrim.tailChars)) {
-            s.softTrim.tailChars = Math.max(0, Math.floor(cfg.softTrim.tailChars));
-        }
-    }
-    if (cfg.hardClear) {
-        if (typeof cfg.hardClear.enabled === "boolean") {
-            s.hardClear.enabled = cfg.hardClear.enabled;
-        }
-        if (typeof cfg.hardClear.placeholder === "string" && cfg.hardClear.placeholder.trim()) {
-            s.hardClear.placeholder = cfg.hardClear.placeholder.trim();
-        }
-    }
-    return s;
+  }
+  return s;
 }

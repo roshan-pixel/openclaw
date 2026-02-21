@@ -2,18 +2,21 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getChannelMessageAdapter = getChannelMessageAdapter;
 var DEFAULT_ADAPTER = {
-    supportsEmbeds: false,
+  supportsEmbeds: false,
 };
 var DISCORD_ADAPTER = {
-    supportsEmbeds: true,
-    buildCrossContextEmbeds: function (originLabel) { return [
-        {
-            description: "From ".concat(originLabel),
-        },
-    ]; },
+  supportsEmbeds: true,
+  buildCrossContextEmbeds: function (originLabel) {
+    return [
+      {
+        description: "From ".concat(originLabel),
+      },
+    ];
+  },
 };
 function getChannelMessageAdapter(channel) {
-    if (channel === "discord")
-        return DISCORD_ADAPTER;
-    return DEFAULT_ADAPTER;
+  if (channel === "discord") {
+    return DISCORD_ADAPTER;
+  }
+  return DEFAULT_ADAPTER;
 }

@@ -3,6 +3,7 @@
 ## 🎯 What This Does
 
 Connects WhatsApp messages to:
+
 - 21 Windows automation tools (via MCP)
 - Local LLM (DeepSeek R1 via Ollama)
 - Activity logging system
@@ -18,23 +19,28 @@ Connects WhatsApp messages to:
 ## 🚀 Quick Start
 
 ### Step 1: Install Dependencies
+
 ```cmd
 pip install -r requirements.txt
 ```
 
 ### Step 2: Copy Files
+
 Copy all generated files to:
+
 ```
 C:\path\to\winclaw\mcp-servers\
 ```
 
 ### Step 3: Start Everything
+
 ```cmd
 cd C:\path\to\winclaw\mcp-servers
 start_complete_system.bat
 ```
 
 This will open 5 terminal windows:
+
 1. LiteLLM Proxy (port 4000)
 2. MCP Server (21 tools)
 3. Log Bridge (port 5001)
@@ -42,6 +48,7 @@ This will open 5 terminal windows:
 5. Status check
 
 ### Step 4: Verify
+
 ```cmd
 check_system_status.bat
 ```
@@ -66,13 +73,13 @@ Response back to WhatsApp
 
 ## 📊 Services & Ports
 
-| Service | Port | Purpose |
-|---------|------|---------|
+| Service          | Port  | Purpose          |
+| ---------------- | ----- | ---------------- |
 | Enhanced Gateway | 18789 | WhatsApp handler |
-| LiteLLM Proxy | 4000 | LLM API |
-| Ollama | 11434 | Local LLM engine |
-| Log Bridge | 5001 | Activity logging |
-| MCP Server | stdio | Tool provider |
+| LiteLLM Proxy    | 4000  | LLM API          |
+| Ollama           | 11434 | Local LLM engine |
+| Log Bridge       | 5001  | Activity logging |
+| MCP Server       | stdio | Tool provider    |
 
 ## 🔍 Checking Logs
 
@@ -83,24 +90,28 @@ Gateway logs: `logs/enhanced_gateway.log`
 ## 🛠️ Manual Start (if needed)
 
 Terminal 1:
+
 ```cmd
 cd %USERPROFILE%
 litellm --config litellm_config.yaml --port 4000
 ```
 
 Terminal 2:
+
 ```cmd
 cd C:\path\to\winclaw\mcp-servers
 python windows_mcp_server.py
 ```
 
 Terminal 3:
+
 ```cmd
 cd C:\path\to\winclaw\mcp-servers
 python whatsapp_log_bridge_server.py
 ```
 
 Terminal 4:
+
 ```cmd
 cd C:\path\to\winclaw\mcp-servers
 python openclaw_enhanced_gateway.py
@@ -118,6 +129,7 @@ python openclaw_enhanced_gateway.py
 ## 🎉 Testing
 
 Send a WhatsApp message and watch:
+
 1. Log Bridge window - See message received
 2. Enhanced Gateway window - See processing
 3. LiteLLM window - See LLM response

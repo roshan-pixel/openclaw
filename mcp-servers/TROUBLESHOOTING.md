@@ -1,11 +1,13 @@
 # MCP Server STDIO Fix - Troubleshooting Guide
 
 ## The Problem
+
 Your MCP server is receiving corrupted input (newlines) instead of valid JSON-RPC messages. This happens when something pollutes stdout/stdin.
 
 ## Step-by-Step Fix
 
 ### Step 1: Test Basic MCP Functionality
+
 Run the minimal test server first to verify MCP itself works:
 
 ```bash
@@ -16,6 +18,7 @@ If this gives the same error, the problem is with your Python environment or how
 If this works, the problem is with the tool imports.
 
 ### Step 2: Run Diagnostics
+
 Identify which tool imports are polluting stdio:
 
 ```bash
@@ -25,7 +28,9 @@ python diagnose_stdio.py 2> diagnostic_output.txt
 Look at `diagnostic_output.txt` for any STDOUT/STDERR pollution warnings.
 
 ### Step 3: Use the Fixed Server
+
 Replace your current server with `windows_mcp_server.py` which has:
+
 - Early stderr redirection before any imports
 - Complete stream isolation during tool loading
 - Debug logging to file (check `mcp_server_debug.log`)
@@ -40,12 +45,14 @@ Replace your current server with `windows_mcp_server.py` which has:
 ## Quick Fixes to Try
 
 ### Fix 1: Disable Python Warnings
+
 ```bash
 set PYTHONWARNINGS=ignore
 python windows_mcp_server.py
 ```
 
 ### Fix 2: Check Your Python Environment
+
 ```bash
 python --version
 where python
@@ -54,6 +61,7 @@ where python
 Make sure you're using the correct Python environment.
 
 ### Fix 3: Verify Working Directory
+
 The server must be run from the directory containing the `tools` folder:
 
 ```powershell
@@ -62,6 +70,7 @@ python windows_mcp_server.py
 ```
 
 ### Fix 4: Check for Buffering Issues
+
 Some Windows terminals buffer output. Try:
 
 ```bash

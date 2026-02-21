@@ -4,85 +4,90 @@ exports.MESSAGE_ACTION_TARGET_MODE = void 0;
 exports.actionRequiresTarget = actionRequiresTarget;
 exports.actionHasTarget = actionHasTarget;
 exports.MESSAGE_ACTION_TARGET_MODE = {
-    send: "to",
-    broadcast: "none",
-    poll: "to",
-    react: "to",
-    reactions: "to",
-    read: "to",
-    edit: "to",
-    unsend: "to",
-    reply: "to",
-    sendWithEffect: "to",
-    renameGroup: "to",
-    setGroupIcon: "to",
-    addParticipant: "to",
-    removeParticipant: "to",
-    leaveGroup: "to",
-    sendAttachment: "to",
-    delete: "to",
-    pin: "to",
-    unpin: "to",
-    "list-pins": "to",
-    permissions: "to",
-    "thread-create": "to",
-    "thread-list": "none",
-    "thread-reply": "to",
-    search: "none",
-    sticker: "to",
-    "sticker-search": "none",
-    "member-info": "none",
-    "role-info": "none",
-    "emoji-list": "none",
-    "emoji-upload": "none",
-    "sticker-upload": "none",
-    "role-add": "none",
-    "role-remove": "none",
-    "channel-info": "channelId",
-    "channel-list": "none",
-    "channel-create": "none",
-    "channel-edit": "channelId",
-    "channel-delete": "channelId",
-    "channel-move": "channelId",
-    "category-create": "none",
-    "category-edit": "none",
-    "category-delete": "none",
-    "voice-status": "none",
-    "event-list": "none",
-    "event-create": "none",
-    timeout: "none",
-    kick: "none",
-    ban: "none",
+  send: "to",
+  broadcast: "none",
+  poll: "to",
+  react: "to",
+  reactions: "to",
+  read: "to",
+  edit: "to",
+  unsend: "to",
+  reply: "to",
+  sendWithEffect: "to",
+  renameGroup: "to",
+  setGroupIcon: "to",
+  addParticipant: "to",
+  removeParticipant: "to",
+  leaveGroup: "to",
+  sendAttachment: "to",
+  delete: "to",
+  pin: "to",
+  unpin: "to",
+  "list-pins": "to",
+  permissions: "to",
+  "thread-create": "to",
+  "thread-list": "none",
+  "thread-reply": "to",
+  search: "none",
+  sticker: "to",
+  "sticker-search": "none",
+  "member-info": "none",
+  "role-info": "none",
+  "emoji-list": "none",
+  "emoji-upload": "none",
+  "sticker-upload": "none",
+  "role-add": "none",
+  "role-remove": "none",
+  "channel-info": "channelId",
+  "channel-list": "none",
+  "channel-create": "none",
+  "channel-edit": "channelId",
+  "channel-delete": "channelId",
+  "channel-move": "channelId",
+  "category-create": "none",
+  "category-edit": "none",
+  "category-delete": "none",
+  "voice-status": "none",
+  "event-list": "none",
+  "event-create": "none",
+  timeout: "none",
+  kick: "none",
+  ban: "none",
 };
 var ACTION_TARGET_ALIASES = {
-    unsend: ["messageId"],
-    edit: ["messageId"],
-    react: ["chatGuid", "chatIdentifier", "chatId"],
-    renameGroup: ["chatGuid", "chatIdentifier", "chatId"],
-    setGroupIcon: ["chatGuid", "chatIdentifier", "chatId"],
-    addParticipant: ["chatGuid", "chatIdentifier", "chatId"],
-    removeParticipant: ["chatGuid", "chatIdentifier", "chatId"],
-    leaveGroup: ["chatGuid", "chatIdentifier", "chatId"],
+  unsend: ["messageId"],
+  edit: ["messageId"],
+  react: ["chatGuid", "chatIdentifier", "chatId"],
+  renameGroup: ["chatGuid", "chatIdentifier", "chatId"],
+  setGroupIcon: ["chatGuid", "chatIdentifier", "chatId"],
+  addParticipant: ["chatGuid", "chatIdentifier", "chatId"],
+  removeParticipant: ["chatGuid", "chatIdentifier", "chatId"],
+  leaveGroup: ["chatGuid", "chatIdentifier", "chatId"],
 };
 function actionRequiresTarget(action) {
-    return exports.MESSAGE_ACTION_TARGET_MODE[action] !== "none";
+  return exports.MESSAGE_ACTION_TARGET_MODE[action] !== "none";
 }
 function actionHasTarget(action, params) {
-    var to = typeof params.to === "string" ? params.to.trim() : "";
-    if (to)
-        return true;
-    var channelId = typeof params.channelId === "string" ? params.channelId.trim() : "";
-    if (channelId)
-        return true;
-    var aliases = ACTION_TARGET_ALIASES[action];
-    if (!aliases)
-        return false;
-    return aliases.some(function (alias) {
-        var value = params[alias];
-        if (typeof value === "string")
-            return value.trim().length > 0;
-        if (typeof value === "number")
-            return Number.isFinite(value);
-        return false;
-    });
+  var to = typeof params.to === "string" ? params.to.trim() : "";
+  if (to) {
+    return true;
+  }
+  var channelId = typeof params.channelId === "string" ? params.channelId.trim() : "";
+  if (channelId) {
+    return true;
+  }
+  var aliases = ACTION_TARGET_ALIASES[action];
+  if (!aliases) {
+    return false;
+  }
+  return aliases.some(function (alias) {
+    var value = params[alias];
+    if (typeof value === "string") {
+      return value.trim().length > 0;
+    }
+    if (typeof value === "number") {
+      return Number.isFinite(value);
+    }
+    return false;
+  });
 }

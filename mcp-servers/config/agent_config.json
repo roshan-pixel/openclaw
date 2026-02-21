@@ -28,12 +28,7 @@
     "rate_limit_per_second": 10.0,
     "max_concurrent_executions": 5,
     "queue_size": 100,
-    "cacheable_tools": [
-      "get_weather",
-      "search",
-      "system_info",
-      "scrape"
-    ]
+    "cacheable_tools": ["get_weather", "search", "system_info", "scrape"]
   },
   "logging": {
     "level": "INFO",

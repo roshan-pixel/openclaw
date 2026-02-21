@@ -26,29 +26,30 @@ var TEMPLATE_VAR_PATTERN = /\{([a-zA-Z][a-zA-Z0-9.]*)\}/g;
  * // Returns: "[gpt-5.2 | think:high]"
  */
 function resolveResponsePrefixTemplate(template, context) {
-    if (!template)
-        return undefined;
-    return template.replace(TEMPLATE_VAR_PATTERN, function (match, varName) {
-        var _a, _b, _c, _d, _e;
-        var normalizedVar = varName.toLowerCase();
-        switch (normalizedVar) {
-            case "model":
-                return (_a = context.model) !== null && _a !== void 0 ? _a : match;
-            case "modelfull":
-                return (_b = context.modelFull) !== null && _b !== void 0 ? _b : match;
-            case "provider":
-                return (_c = context.provider) !== null && _c !== void 0 ? _c : match;
-            case "thinkinglevel":
-            case "think":
-                return (_d = context.thinkingLevel) !== null && _d !== void 0 ? _d : match;
-            case "identity.name":
-            case "identityname":
-                return (_e = context.identityName) !== null && _e !== void 0 ? _e : match;
-            default:
-                // Leave unrecognized variables as-is
-                return match;
-        }
-    });
+  if (!template) {
+    return undefined;
+  }
+  return template.replace(TEMPLATE_VAR_PATTERN, function (match, varName) {
+    var _a, _b, _c, _d, _e;
+    var normalizedVar = varName.toLowerCase();
+    switch (normalizedVar) {
+      case "model":
+        return (_a = context.model) !== null && _a !== void 0 ? _a : match;
+      case "modelfull":
+        return (_b = context.modelFull) !== null && _b !== void 0 ? _b : match;
+      case "provider":
+        return (_c = context.provider) !== null && _c !== void 0 ? _c : match;
+      case "thinkinglevel":
+      case "think":
+        return (_d = context.thinkingLevel) !== null && _d !== void 0 ? _d : match;
+      case "identity.name":
+      case "identityname":
+        return (_e = context.identityName) !== null && _e !== void 0 ? _e : match;
+      default:
+        // Leave unrecognized variables as-is
+        return match;
+    }
+  });
 }
 /**
  * Extract short model name from a full model string.
@@ -64,19 +65,20 @@ function resolveResponsePrefixTemplate(template, context) {
  * extractShortModelName("gpt-5.2-latest") // "gpt-5.2"
  */
 function extractShortModelName(fullModel) {
-    // Strip provider prefix
-    var slash = fullModel.lastIndexOf("/");
-    var modelPart = slash >= 0 ? fullModel.slice(slash + 1) : fullModel;
-    // Strip date suffixes (YYYYMMDD format)
-    return modelPart.replace(/-\d{8}$/, "").replace(/-latest$/, "");
+  // Strip provider prefix
+  var slash = fullModel.lastIndexOf("/");
+  var modelPart = slash >= 0 ? fullModel.slice(slash + 1) : fullModel;
+  // Strip date suffixes (YYYYMMDD format)
+  return modelPart.replace(/-\d{8}$/, "").replace(/-latest$/, "");
 }
 /**
  * Check if a template string contains any template variables.
  */
 function hasTemplateVariables(template) {
-    if (!template)
-        return false;
-    // Reset lastIndex since we're using a global regex
-    TEMPLATE_VAR_PATTERN.lastIndex = 0;
-    return TEMPLATE_VAR_PATTERN.test(template);
+  if (!template) {
+    return false;
+  }
+  // Reset lastIndex since we're using a global regex
+  TEMPLATE_VAR_PATTERN.lastIndex = 0;
+  return TEMPLATE_VAR_PATTERN.test(template);
 }

@@ -57,6 +57,7 @@ MCP Server  LiteLLM Proxy  WhatsApp Bridge
 ```
 
 **Data flow for one AI action:**
+
 1. User sends message -> Gateway
 2. Gateway calls Claude/Ollama with tools list
 3. Claude decides to call `Windows-MCP:Snapshot` tool
@@ -156,15 +157,16 @@ mcp-servers/
 
 ## Prerequisites
 
-| Tool | Version | Why Needed | Download |
-| :--- | :--- | :--- | :--- |
-| Python | 3.10+ | Runs all .py files | [python.org](https://www.python.org/) |
-| Node.js | 18+ | For .mjs MCP server | [nodejs.org](https://nodejs.org/) |
-| Git | Any | To clone the repo | [git-scm.com](https://git-scm.com/) |
-| Anthropic API Key | --- | Powers Claude AI | [console.anthropic.com](https://console.anthropic.com/) |
-| Ollama (optional) | Latest | Run local LLMs | [ollama.ai](https://ollama.ai/) |
+| Tool              | Version | Why Needed          | Download                                                |
+| :---------------- | :------ | :------------------ | :------------------------------------------------------ |
+| Python            | 3.10+   | Runs all .py files  | [python.org](https://www.python.org/)                   |
+| Node.js           | 18+     | For .mjs MCP server | [nodejs.org](https://nodejs.org/)                       |
+| Git               | Any     | To clone the repo   | [git-scm.com](https://git-scm.com/)                     |
+| Anthropic API Key | ---     | Powers Claude AI    | [console.anthropic.com](https://console.anthropic.com/) |
+| Ollama (optional) | Latest  | Run local LLMs      | [ollama.ai](https://ollama.ai/)                         |
 
 **Quick check:** Open PowerShell and run:
+
 ```powershell
 python --version # Should show 3.10+
 node --version # Should show 18+
@@ -176,12 +178,14 @@ git --version # Any version is fine
 ## Installation
 
 ### Step 1: Clone the Repository
+
 ```powershell
 git clone https://github.com/roshan-pixel/winclaw.git
 cd winclaw/mcp-servers
 ```
 
 ### Step 2: Set Up Python Virtual Environment (Recommended)
+
 ```powershell
 # Create virtual environment
 python -m venv venv
@@ -189,20 +193,25 @@ python -m venv venv
 # Activate it (Windows PowerShell)
 .\\venv\\Scripts\\Activate.ps1
 ```
-*You should see (venv) in your prompt now.*
+
+_You should see (venv) in your prompt now._
 
 ### Step 3: Install Python Dependencies
+
 ```powershell
 pip install -r requirements.txt
 ```
-*This installs: flask, requests, aiohttp, python-dotenv, fastapi, uvicorn, mcp, anthropic, litellm, and more.*
+
+_This installs: flask, requests, aiohttp, python-dotenv, fastapi, uvicorn, mcp, anthropic, litellm, and more._
 
 ### Step 4: Install Node.js Dependencies
+
 ```powershell
 npm install
 ```
 
 ### Step 5: Set Up Your Environment Variables
+
 ```powershell
 # Copy the example file
 copy .env.example .env
@@ -210,9 +219,11 @@ copy .env.example .env
 # Open .env in Notepad and fill in your API key
 notepad .env
 ```
+
 In `.env`, replace the placeholder with your real Anthropic key: `ANTHROPIC_API_KEY=sk-ant-api03-xxxxxxxxxxxxxxxx...`
 
 ### Step 6: Configure WinClaw (if using with WinClaw client)
+
 ```powershell
 # Copy the template
 copy winclaw-mcp-config.template.json winclaw-mcp-config.json
@@ -220,6 +231,7 @@ copy winclaw-mcp-config.template.json winclaw-mcp-config.json
 # Open and replace YOUR_ABSOLUTE_PATH with your actual path
 notepad winclaw-mcp-config.json
 ```
+
 **Example:** replace `["/mcp-servers/mcp-cli-tool.py"]` with your path: `["C:/Users/YourName/winclaw/mcp-servers/mcp-cli-tool.py"]`
 
 ---
@@ -227,6 +239,7 @@ notepad winclaw-mcp-config.json
 ## Configuration
 
 ### config/api_config.json — Which AI model to use:
+
 ```json
 {
   "api_key": "FROM_ENV",
@@ -236,6 +249,7 @@ notepad winclaw-mcp-config.json
 ```
 
 ### config/mcp_config.json — Which MCP servers to start:
+
 ```json
 {
   "mcpServers": {
@@ -248,6 +262,7 @@ notepad winclaw-mcp-config.json
 ```
 
 ### config/agent_config.json — How the agent behaves:
+
 ```json
 {
   "orchestrator": {
@@ -262,56 +277,66 @@ notepad winclaw-mcp-config.json
 ## Running the Server
 
 ### Option A: Simple CLI Chat (Easiest)
+
 ```powershell
 python winclaw_main.py
 ```
+
 Type your instructions and press Enter. Claude will respond and take actions.
 
 ### Option B: Full Gateway Server (REST API)
+
 ```powershell
 python start_gateway.py
 ```
+
 Server starts at `http://localhost:18789`. Send requests via PowerShell:
+
 ```powershell
 Invoke-WebRequest -Uri "http://localhost:18789/chat" -Method POST -ContentType "application/json" -Body '{"message": "Take a screenshot and describe what you see"}'
 ```
 
 ### Option C: Start Everything at Once (Recommended)
+
 ```powershell
 .\\start_complete_system.bat
 ```
+
 This opens 4 terminal windows:
+
 1. MCP Server — Windows tools (21 tools, stdio)
 2. LiteLLM Proxy — LLM routing (port 4000)
 3. WhatsApp Bridge — Message logging (port 5001)
 4. WinClaw Gateway — Main API (port 18789)
 
 ### Option D: MCP Server Standalone
+
 ```powershell
 python windows_mcp_server.py
 ```
+
 Use this when connecting from Claude Desktop or another MCP client.
 
 ---
 
 ## Available Tools
 
-| Tool | What It Does | Example Use |
-| :--- | :--- | :--- |
-| Windows-MCP:Snapshot | Take a screenshot | "What's on my screen?" |
-| Windows-MCP:Click | Click at x,y coordinates | "Click the OK button" |
-| Windows-MCP:Type | Type text anywhere | "Type Hello in the box" |
-| Windows-MCP:Scroll | Scroll up/down/left/right | "Scroll down the page" |
-| Windows-MCP:Move | Move mouse / hover / drag | "Hover over the menu" |
-| Windows-MCP:Shortcut | Keyboard shortcuts | "Press Ctrl+C" |
-| Windows-MCP:Shell | Run PowerShell / CMD | "List files in Downloads" |
-| Windows-MCP:App | Launch / resize / switch apps | "Open Notepad" |
-| Windows-MCP:Scrape | Fetch web page content | "Read article at URL" |
-| Windows-MCP:Wait | Pause execution | "Wait 3 seconds" |
-| Windows-MCP:MultiSelect| Ctrl+Click multiple items | "Select files 1, 3, 5" |
-| Windows-MCP:MultiEdit | Type in multiple fields | "Fill out the form" |
-| whatsapp-log-message | Log to WhatsApp bridge | "Log this event" |
-| whatsapp-bridge-health | Check bridge status | "Is bridge running?" |
+| Tool                    | What It Does                  | Example Use               |
+| :---------------------- | :---------------------------- | :------------------------ |
+| Windows-MCP:Snapshot    | Take a screenshot             | "What's on my screen?"    |
+| Windows-MCP:Click       | Click at x,y coordinates      | "Click the OK button"     |
+| Windows-MCP:Type        | Type text anywhere            | "Type Hello in the box"   |
+| Windows-MCP:Scroll      | Scroll up/down/left/right     | "Scroll down the page"    |
+| Windows-MCP:Move        | Move mouse / hover / drag     | "Hover over the menu"     |
+| Windows-MCP:Shortcut    | Keyboard shortcuts            | "Press Ctrl+C"            |
+| Windows-MCP:Shell       | Run PowerShell / CMD          | "List files in Downloads" |
+| Windows-MCP:App         | Launch / resize / switch apps | "Open Notepad"            |
+| Windows-MCP:Scrape      | Fetch web page content        | "Read article at URL"     |
+| Windows-MCP:Wait        | Pause execution               | "Wait 3 seconds"          |
+| Windows-MCP:MultiSelect | Ctrl+Click multiple items     | "Select files 1, 3, 5"    |
+| Windows-MCP:MultiEdit   | Type in multiple fields       | "Fill out the form"       |
+| whatsapp-log-message    | Log to WhatsApp bridge        | "Log this event"          |
+| whatsapp-bridge-health  | Check bridge status           | "Is bridge running?"      |
 
 ---
 
@@ -320,12 +345,15 @@ Use this when connecting from Claude Desktop or another MCP client.
 The WhatsApp bridge lets you send and receive messages through your AI agent.
 
 1. **Start the bridge server:**
+
 ```powershell
 python whatsapp_log_bridge_server.py
 ```
+
 Runs at `http://localhost:5001`.
 
 2. **Check if it's working:**
+
 ```powershell
 Invoke-WebRequest -Uri "http://localhost:5001/health"
 ```
@@ -346,6 +374,7 @@ Invoke-WebRequest -Uri "http://localhost:5001/health"
 - **Solution:** Find the PID using `netstat -ano | findstr :18789` and kill it with `taskkill /PID /F`.
 
 **Run diagnostics:**
+
 ```powershell
 python diagnose_mcp_stdio.py # Test MCP connection
 python diagnose_api_key.py # Test your API key
@@ -380,4 +409,4 @@ MIT License — free to use, modify, and distribute.
 4. Push to branch: `git push origin feature/my-feature`
 5. Open a Pull Request
 
-*Built with Anthropic Claude, MCP, and Python.*
+_Built with Anthropic Claude, MCP, and Python._

@@ -8,10 +8,10 @@ var directive_tags_js_1 = require("../utils/directive-tags.js");
  * Default is file (preserves backward compatibility).
  */
 function parseAudioTag(text) {
-    var result = (0, directive_tags_js_1.parseInlineDirectives)(text, { stripReplyTags: false });
-    return {
-        text: result.text,
-        audioAsVoice: result.audioAsVoice,
-        hadTag: result.hasAudioTag,
-    };
+  var result = (0, directive_tags_js_1.parseInlineDirectives)(text, { stripReplyTags: false });
+  return {
+    text: result.text,
+    audioAsVoice: result.audioAsVoice,
+    hadTag: result.hasAudioTag,
+  };
 }

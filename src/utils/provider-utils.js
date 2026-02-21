@@ -10,22 +10,25 @@ exports.isReasoningTagProvider = isReasoningTagProvider;
  * API fields for reasoning/thinking.
  */
 function isReasoningTagProvider(provider) {
-    if (!provider)
-        return false;
-    var normalized = provider.trim().toLowerCase();
-    // Check for exact matches or known prefixes/substrings for reasoning providers
-    if (normalized === "ollama" ||
-        normalized === "google-gemini-cli" ||
-        normalized === "google-generative-ai") {
-        return true;
-    }
-    // Handle google-antigravity and its model variations (e.g. google-antigravity/gemini-3)
-    if (normalized.includes("google-antigravity")) {
-        return true;
-    }
-    // Handle Minimax (M2.1 is chatty/reasoning-like)
-    if (normalized.includes("minimax")) {
-        return true;
-    }
+  if (!provider) {
     return false;
+  }
+  var normalized = provider.trim().toLowerCase();
+  // Check for exact matches or known prefixes/substrings for reasoning providers
+  if (
+    normalized === "ollama" ||
+    normalized === "google-gemini-cli" ||
+    normalized === "google-generative-ai"
+  ) {
+    return true;
+  }
+  // Handle google-antigravity and its model variations (e.g. google-antigravity/gemini-3)
+  if (normalized.includes("google-antigravity")) {
+    return true;
+  }
+  // Handle Minimax (M2.1 is chatty/reasoning-like)
+  if (normalized.includes("minimax")) {
+    return true;
+  }
+  return false;
 }

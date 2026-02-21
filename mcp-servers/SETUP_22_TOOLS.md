@@ -148,18 +148,23 @@ Agent: [Uses windows-mcp-snapshot and windows-mcp-vision]
 ### Tools Not Showing Up
 
 1. **Verify servers are running:**
+
    ```bash
    python mcp-cli-tool.py status
    ```
+
    Look for "running": true for both servers.
 
 2. **Check MCP CLI tool works:**
+
    ```bash
    python mcp-cli-tool.py list-tools
    ```
+
    Should list all 22 tools in JSON.
 
 3. **Verify OpenClaw config:**
+
    ```bash
    grep -A 5 "cliBackends" %USERPROFILE%\.openclaw\openclaw.json
    ```
@@ -189,14 +194,17 @@ icacls "C:\path\to\winclaw\mcp-servers\mcp-cli-tool.py" /grant Everyone:F
 ## Next Steps
 
 ### Option 1: Quick Testing
+
 Use the tools in your agent immediately via chat.
 
 ### Option 2: Advanced Configuration
+
 - Add tool aliases in openclaw.json (see `openclaw-mcp-config.json`)
 - Create custom wrappers for frequently-used tools
 - Add tool cost tracking for metered usage
 
 ### Option 3: Production Deployment
+
 - Move MCP servers to a stable location
 - Create systemd services or Windows scheduled tasks to auto-start servers
 - Add health monitoring and alerting

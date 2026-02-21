@@ -1,15 +1,15 @@
 {
   "name": "@openclaw/windows-mcp",
   "version": "1.0.0",
-  "type": "module",
   "description": "Windows desktop automation tools for OpenClaw",
+  "type": "module",
   "main": "index.js",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.26.0"
+  },
   "openclaw": {
     "extensions": [
       "./index.js"
     ]
-  },
-  "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.26.0"
   }
 }

@@ -36,6 +36,7 @@ npm --version
 ```
 
 **Expected output:**
+
 ```
 v20.11.0 (or similar)
 10.2.4 (or similar)
@@ -96,6 +97,7 @@ Paste this configuration (replace YOUR_PHONE and YOUR_API_KEY):
 ```
 
 **Replace:**
+
 - `+91XXXXXXXXXX` → Your WhatsApp number (e.g., `+919876543210`)
 - `sk-YOUR_OPENAI_API_KEY_HERE` → Your OpenAI API key from https://platform.openai.com/api-keys
 
@@ -122,6 +124,7 @@ npm run gateway
 ```
 
 **Expected output:**
+
 ```
 [gateway] Starting OpenClaw Gateway
 [gateway] WebSocket server listening on ws://127.0.0.1:18789
@@ -151,6 +154,7 @@ npm run cli channels login
 3. **Confirm** with fingerprint/face ID
 
 **Expected output:**
+
 ```
 ✓ WhatsApp connected successfully
 ✓ Session saved
@@ -167,6 +171,7 @@ npm run cli channels status
 ```
 
 **Expected output:**
+
 ```
 WhatsApp: ✓ linked, connected
   Account: +919876543210
@@ -204,20 +209,26 @@ WhatsApp: ✓ linked, connected
 ## 🔧 Troubleshooting
 
 ### Issue: "node is not recognized"
+
 **Solution**: Node.js not installed. Go to Step 1.
 
 ### Issue: QR code not appearing
-**Solution**: 
+
+**Solution**:
+
 - Check if Gateway is running in Terminal 1
 - Try: `npm run cli channels logout` then login again
 
 ### Issue: Bot not responding
+
 **Solution**:
+
 - Check your phone number is in `allowFrom` list
 - Verify OpenAI API key is valid
 - Check Terminal 1 for error messages
 
 ### Issue: "Cannot find module"
+
 **Solution**: Run `npm install` again
 
 ---
@@ -227,6 +238,7 @@ WhatsApp: ✓ linked, connected
 ### Advanced Configuration:
 
 **Multi-Account Setup**:
+
 ```json
 {
   "channels": {
@@ -241,7 +253,8 @@ WhatsApp: ✓ linked, connected
 ```
 
 **Group Chat Support**:
-```json
+
+````json
 {
   "channels": {
     "whatsapp": {
@@ -273,7 +286,7 @@ python -m venv .venv
 
 # Install dependencies
 pip install -r mcp-servers\requirements.txt
-```
+````
 
 **PASS**: `pip install` completes without errors.  
 **FAIL**: missing package errors → upgrade pip (`pip install --upgrade pip`) and retry.
@@ -306,14 +319,14 @@ python mcp-servers\test_mcp_minimal.py
 
 ### Screenshot tool (Snapshot)
 
-In Claude Desktop: ask *"Take a screenshot"*.
+In Claude Desktop: ask _"Take a screenshot"_.
 
 **PASS**: screenshot image appears in the chat.  
 **FAIL**: `PIL` import error → `pip install Pillow`; `pyautogui` error → `pip install pyautogui`.
 
 ### Shell tool
 
-In Claude Desktop: ask *"Run `echo hello` in PowerShell"*.
+In Claude Desktop: ask _"Run `echo hello` in PowerShell"_.
 
 **PASS**: response contains `STDOUT: hello`.  
 **FAIL**: `subprocess` error or timeout → check PowerShell execution policy (`Set-ExecutionPolicy RemoteSigned`).

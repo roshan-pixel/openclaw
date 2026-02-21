@@ -2,11 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.isAbortError = isAbortError;
 function isAbortError(err) {
-    if (!err || typeof err !== "object")
-        return false;
-    var name = "name" in err ? String(err.name) : "";
-    if (name === "AbortError")
-        return true;
-    var message = "message" in err && typeof err.message === "string" ? err.message.toLowerCase() : "";
-    return message.includes("aborted");
+  if (!err || typeof err !== "object") {
+    return false;
+  }
+  var name = "name" in err ? String(err.name) : "";
+  if (name === "AbortError") {
+    return true;
+  }
+  var message =
+    "message" in err && typeof err.message === "string" ? err.message.toLowerCase() : "";
+  return message.includes("aborted");
 }

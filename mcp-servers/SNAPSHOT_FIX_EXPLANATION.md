@@ -30,22 +30,24 @@ The original `snapshot_tool.py` was doing this:
 async def execute(self, arguments: dict):
     # Step 1: Get accessibility tree (HANGS HERE!)
     acc_tree = get_accessibility_tree(use_dom=use_dom)
-    
+
     # Step 2: Format tree data
     acc_text = self._format_accessibility_tree(acc_tree)
-    
+
     # Step 3: Only if use_vision=True, take screenshot
     if use_vision:
         screenshot_data = self._capture_screenshot()
 ```
 
 **The Problem:**
+
 - `get_accessibility_tree()` uses Windows UI Automation
 - This can hang or take 30+ seconds
 - Even when user just wants a screenshot (`use_vision=false`)
 - The tool still calls the slow accessibility code FIRST
 
 **Why It Hangs:**
+
 - Windows UI Automation iterates through all UI elements
 - Can freeze on certain windows (especially browsers)
 - Takes forever on complex UIs
@@ -59,17 +61,18 @@ The fixed version:
 async def execute(self, arguments: dict):
     # Just take the screenshot - fast and simple!
     screenshot = ImageGrab.grab()
-    
+
     # Convert to base64
     buffered = io.BytesIO()
     screenshot.save(buffered, format="PNG", optimize=True)
     img_base64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
-    
+
     # Return image
     return [ImageContent(type="image", data=img_base64, mimeType="image/png")]
 ```
 
 **Why This Works:**
+
 - ✅ No Windows UI Automation calls
 - ✅ Direct screenshot with PIL/ImageGrab
 - ✅ Fast (< 1 second)
@@ -78,26 +81,29 @@ async def execute(self, arguments: dict):
 
 ## 📊 **Performance Comparison**
 
-| Method | Time | Reliability | What You Get |
-|--------|------|-------------|--------------|
-| **Original** | 30+ sec (timeout) | ❌ Hangs | Accessibility tree + screenshot |
-| **Fixed** | < 1 second | ✅ Works | Screenshot only |
+| Method       | Time              | Reliability | What You Get                    |
+| ------------ | ----------------- | ----------- | ------------------------------- |
+| **Original** | 30+ sec (timeout) | ❌ Hangs    | Accessibility tree + screenshot |
+| **Fixed**    | < 1 second        | ✅ Works    | Screenshot only                 |
 
 ## 🔧 **What Changed**
 
 ### **Removed:**
+
 - ❌ `get_accessibility_tree()` call
 - ❌ `get_logger()` dependency
 - ❌ Complex accessibility tree formatting
 - ❌ Conditional screenshot logic
 
 ### **Kept:**
+
 - ✅ Screenshot capture (PIL ImageGrab)
 - ✅ Base64 encoding
 - ✅ MCP ImageContent response
 - ✅ Error handling
 
 ### **Improved:**
+
 - ✅ Always takes screenshot (that's what users want!)
 - ✅ Fast execution
 - ✅ No external dependencies that can hang
@@ -114,6 +120,7 @@ async def execute(self, arguments: dict):
 ## ✅ **Expected Results After Fix**
 
 ### **Before (Broken):**
+
 ```
 22:06:56 🔧 CALLING TOOL: windows-mcp-snapshot
 [... silence for 30 seconds ...]
@@ -122,6 +129,7 @@ async def execute(self, arguments: dict):
 ```
 
 ### **After (Fixed):**
+
 ```
 22:06:56 🔧 CALLING TOOL: windows-mcp-snapshot
 22:06:56 ✅ Tool executed successfully (< 1 sec)
@@ -140,16 +148,19 @@ async def execute(self, arguments: dict):
 ## 📝 **Technical Notes**
 
 ### **Why Accessibility Tree Was Added:**
+
 - Original goal: Provide rich UI information (buttons, text fields, etc.)
 - Use case: AI agents automating complex UI tasks
 - Reality: Too slow, hangs frequently, overkill for screenshots
 
 ### **Why We Removed It:**
+
 - 99% of "take a screenshot" requests don't need UI tree
 - Windows UI Automation is unreliable
 - Better to have fast, working screenshots than slow, hanging rich data
 
 ### **Future Enhancement Ideas:**
+
 - Add separate `windows-mcp-ui-tree` tool for accessibility data
 - Keep screenshot tool simple and fast
 - Optional: Add reduced-resolution "quick preview" mode
@@ -164,11 +175,13 @@ async def execute(self, arguments: dict):
 ## 🆘 **If Still Not Working:**
 
 1. Check if PIL/Pillow is installed:
+
    ```
    python -c "from PIL import ImageGrab; print('OK')"
    ```
 
 2. Test the fixed tool directly:
+
    ```
    python -c "from tools.snapshot_tool import SnapshotTool; print('Import OK')"
    ```
@@ -180,7 +193,7 @@ async def execute(self, arguments: dict):
 ## 📦 **Files Involved**
 
 - `snapshot_tool_fixed.py` - The fixed version
-- `fix_snapshot_tool.bat` - Deployment script  
+- `fix_snapshot_tool.bat` - Deployment script
 - `tools/snapshot_tool.py` - Original (will be replaced)
 - `tools/snapshot_tool_backup.py` - Backup of original
 

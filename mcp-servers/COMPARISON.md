@@ -3,6 +3,7 @@
 ## The Critical Difference
 
 ### ❌ Original Approach (BROKEN)
+
 ```python
 # Import everything first
 import sys
@@ -19,11 +20,13 @@ sys.stderr = SilentStream()
 ```
 
 **Problem:** By the time you redirect, Python has already:
+
 - Imported modules that printed warnings
 - Executed module-level code that logged to console
 - Set up logging handlers pointing to stdout/stderr
 
 ### ✅ Ultra-Clean Approach (WORKS)
+
 ```python
 # FIRST: Save and redirect
 import sys
@@ -47,6 +50,7 @@ sys.stdout = _stdout
 ## Key Improvements
 
 ### 1. Early Redirection
+
 ```python
 # Ultra-clean: Redirect IMMEDIATELY
 import sys
@@ -57,15 +61,16 @@ sys.stderr = open(os.devnull, 'w')  # LINE 6 of the file
 ```
 
 ### 2. Decorator Pattern for Isolation
+
 ```python
 def with_null_streams(func):
     """Execute function with streams isolated"""
     def wrapper(*args, **kwargs):
         old_stdout, old_stderr, old_stdin = sys.stdout, sys.stderr, sys.stdin
-        
+
         null = NullIO()  # Perfect null device
         sys.stdout = sys.stderr = sys.stdin = null
-        
+
         try:
             return func(*args, **kwargs)
         finally:
@@ -81,6 +86,7 @@ def load_tool_silent(tool_name):
 ```
 
 ### 3. File-Only Logging
+
 ```python
 LOG_FILE = "mcp_execution.log"
 
@@ -92,6 +98,7 @@ def log(message):
 ```
 
 ### 4. NullIO Class (Better than SilentStream)
+
 ```python
 class NullIO:
     """Perfect null device with all methods"""
@@ -104,6 +111,7 @@ class NullIO:
 ```
 
 ### 5. Guaranteed Restoration
+
 ```python
 # Old way (BAD):
 sys.stdout = devnull
@@ -121,6 +129,7 @@ finally:
 ## Execution Flow Comparison
 
 ### Original Server (Where It Breaks)
+
 ```
 1. Import MCP (may print warnings) ❌
 2. Import tools (definitely print stuff) ❌
@@ -134,6 +143,7 @@ finally:
 ```
 
 ### Ultra-Clean Server (Clean Flow)
+
 ```
 1. Redirect stderr to /dev/null
 2. Import MCP (warnings go to /dev/null) ✓
@@ -150,6 +160,7 @@ finally:
 ## What Gets Blocked
 
 ### During Import Phase
+
 ```python
 sys.stderr = open(os.devnull, 'w')  # Before imports
 
@@ -161,6 +172,7 @@ import some_module
 ```
 
 ### During Tool Loading
+
 ```python
 @with_null_streams
 def load_tool_silent(tool_name):
@@ -172,6 +184,7 @@ def load_tool_silent(tool_name):
 ```
 
 ### During Tool Execution
+
 ```python
 @with_null_streams
 async def execute_isolated():
@@ -185,6 +198,7 @@ async def execute_isolated():
 ## Testing the Difference
 
 ### Test 1: Basic Import
+
 ```python
 # Will the server start without errors?
 python windows_mcp_server_ultraclean.py
@@ -194,6 +208,7 @@ python windows_mcp_server_ultraclean.py
 ```
 
 ### Test 2: Manual JSON-RPC
+
 ```python
 # Send initialize request
 echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{}}' | python windows_mcp_server_ultraclean.py
@@ -203,6 +218,7 @@ echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{}}' | python windo
 ```
 
 ### Test 3: Tool Execution
+
 ```python
 # Via diagnostic script
 python diagnose_mcp_stdio.py
@@ -216,6 +232,7 @@ python diagnose_mcp_stdio.py
 ## Why This Matters for Your System
 
 Your stack:
+
 ```
 WhatsApp → OpenClaw → ULTIMATE → Ollama (DeepSeek)
                        ↓
@@ -225,10 +242,12 @@ WhatsApp → OpenClaw → ULTIMATE → Ollama (DeepSeek)
 ```
 
 The MCP protocol is STRICT:
+
 - Every line on stdout MUST be valid JSON-RPC
 - No exceptions, no mixed output, no debugging
 
 When windows_mcp_server prints anything extra:
+
 ```
 Loading tools...          ← NOT JSON
 {"jsonrpc":"2.0",...}     ← JSON-RPC response
@@ -238,6 +257,7 @@ MCPManager tries to parse line 1 as JSON → FAILS
 Your entire tool system breaks.
 
 With ultra-clean server:
+
 ```
 {"jsonrpc":"2.0",...}     ← Pure JSON-RPC
 ```
@@ -247,6 +267,7 @@ MCPManager parses successfully → Tools work!
 ## Minimal Server Advantage
 
 The minimal_screenshot_mcp.py is even cleaner:
+
 - Only 100 lines
 - Only imports: mcp, pyautogui, base64
 - Zero complex tool modules
@@ -260,17 +281,17 @@ If minimal server also fails:
 
 ## Summary Table
 
-| Aspect | Original | Ultra-Clean | Minimal |
-|--------|----------|-------------|---------|
-| Stderr redirect timing | After imports | Before imports | Before imports |
-| Tool load isolation | Manual try-catch | @decorator | N/A (no tools) |
-| Logging | Console + file | File only | None |
-| Error handling | Basic | Try-finally everywhere | Basic |
-| Stream restoration | Manual | Guaranteed | N/A |
-| Lines of code | ~150 | ~250 | ~60 |
-| Tool count | 21 | 21 | 1 |
-| Debugging | Hard | Easy (log file) | Trivial |
-| Production ready | ❌ | ✅ | ❌ (test only) |
+| Aspect                 | Original         | Ultra-Clean            | Minimal        |
+| ---------------------- | ---------------- | ---------------------- | -------------- |
+| Stderr redirect timing | After imports    | Before imports         | Before imports |
+| Tool load isolation    | Manual try-catch | @decorator             | N/A (no tools) |
+| Logging                | Console + file   | File only              | None           |
+| Error handling         | Basic            | Try-finally everywhere | Basic          |
+| Stream restoration     | Manual           | Guaranteed             | N/A            |
+| Lines of code          | ~150             | ~250                   | ~60            |
+| Tool count             | 21               | 21                     | 1              |
+| Debugging              | Hard             | Easy (log file)        | Trivial        |
+| Production ready       | ❌               | ✅                     | ❌ (test only) |
 
 ## Migration Path
 

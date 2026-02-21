@@ -151,11 +151,11 @@ The `mcp-servers/` and `extensions/windows-mcp/` components provide high-privile
 
 ### Request Limits
 
-| Control | Env var | Default |
-|---------|---------|---------|
-| Request body cap | `WinClaw_MAX_REQUEST_BYTES` | 5 MB |
-| Rate limit (requests/window) | `WinClaw_RATE_LIMIT_REQUESTS` | 60 |
-| Rate limit window (seconds) | `WinClaw_RATE_LIMIT_WINDOW` | 60 |
+| Control                      | Env var                       | Default |
+| ---------------------------- | ----------------------------- | ------- |
+| Request body cap             | `WinClaw_MAX_REQUEST_BYTES`   | 5 MB    |
+| Rate limit (requests/window) | `WinClaw_RATE_LIMIT_REQUESTS` | 60      |
+| Rate limit window (seconds)  | `WinClaw_RATE_LIMIT_WINDOW`   | 60      |
 
 ### Shell / Destructive Command Guard
 
@@ -184,4 +184,3 @@ WinClaw is a **trusted-operator tool**. The assumed deployment is:
 - The operator fully trusts the LLM responses driving automation.
 
 It is **not** designed to be exposed to untrusted users or the public internet.
-

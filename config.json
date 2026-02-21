@@ -2,9 +2,7 @@
   "mcpServers": {
     "windows-mcp": {
       "command": "python",
-      "args": [
-        "mcp-servers/windows_mcp_server.py"
-      ],
+      "args": ["mcp-servers/windows_mcp_server.py"],
       "env": {},
       "enabled": true
     }

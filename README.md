@@ -5,6 +5,7 @@ Connect AI models (Claude, Ollama/DeepSeek) to 21 Windows automation tools. Cont
 ---
 
 ## 📖 Table of Contents
+
 - [What is This?](#what-is-this)
 - [Architecture Overview](#architecture-overview)
 - [Folder Structure](#folder-structure)
@@ -20,9 +21,11 @@ Connect AI models (Claude, Ollama/DeepSeek) to 21 Windows automation tools. Cont
 ---
 
 ## 🧐 What is This?
+
 **WinClaw** is an AI agent framework that gives Claude (or any LLM) the ability to control your Windows PC in real-time. It uses the **Model Context Protocol (MCP)**, an open standard that lets AI models call tools like taking a screenshot, clicking a button, or running a shell command during a conversation.
 
 **In simple terms:**
+
 1. **You type:** "Open Chrome and search for the weather in Jaipur."
 2. **Claude thinks:** Calls tools (clicks, types, takes screenshot).
 3. **Claude replies:** With the result + screenshot.
@@ -30,6 +33,7 @@ Connect AI models (Claude, Ollama/DeepSeek) to 21 Windows automation tools. Cont
 ---
 
 ## 🏗 Architecture Overview
+
 ```
 YOU (User Chat via API)
       │
@@ -46,6 +50,7 @@ WhatsApp Bridge (whatsapp_log_bridge_server.py — HTTP port 5001)
 ```
 
 **Data flow for one AI action:**
+
 1. User sends message -> Gateway.
 2. Gateway calls Claude/Ollama with tools list.
 3. Claude decides to call `windows-mcp-snapshot` tool.
@@ -63,6 +68,7 @@ WhatsApp Bridge (whatsapp_log_bridge_server.py — HTTP port 5001)
 All core WinClaw files live under `mcp-servers/`.
 
 ### 🚀 Core Entry Points (`mcp-servers/`)
+
 - `winclaw_main.py`: Simple CLI chat entry point.
 - `winclaw_gateway.py`: Full FastAPI REST gateway (main server).
 - `start_gateway.py`: Helper to start gateway with env check.
@@ -70,18 +76,21 @@ All core WinClaw files live under `mcp-servers/`.
 - `windows_mcp_server.mjs`: Node.js version of the MCP server.
 
 ### 💬 WhatsApp Integration (`mcp-servers/`)
+
 - `whatsapp_bridge_mcp.py`: MCP wrapper for WhatsApp bridge.
 - `whatsapp_http_bridge.py`: HTTP REST bridge server.
 - `whatsapp_log_bridge.py`: Log-based bridge.
 - `whatsapp_log_bridge_server.py`: Bridge server (port 5001).
 
 ### 🛠 Startup Utilities (`mcp-servers/`)
+
 - `start_complete_system.bat`: One-click starts ALL services.
 - `check_system_status.bat`: Check if all services are running.
 - `mcp-cli-tool.py`: CLI interface for MCP tools.
 - `requirements.txt`: Python dependencies.
 
 ### ⚙️ Config Templates (`mcp-servers/`)
+
 - `.env.example`: Copy this to `.env` and fill in keys.
 - `winclaw-mcp-config.template.json`: Copy & customize for WinClaw.
 - `config/api_config.json`: Choose your model.
@@ -90,6 +99,7 @@ All core WinClaw files live under `mcp-servers/`.
 - `package.json`: Node.js config for the `.mjs` server.
 
 ### 🧠 lib — Core Library (`mcp-servers/lib/`)
+
 - `mcp_manager.py`: Manages MCP server connections.
 - `agent_integration.py`: Enhanced agent wrapper.
 - `agent_loop.py`: Think -> Act -> Observe loop.
@@ -109,13 +119,14 @@ All core WinClaw files live under `mcp-servers/`.
 ---
 
 ## 📋 Prerequisites
-| Tool | Version | Why Needed | Download |
-| :--- | :--- | :--- | :--- |
-| **Python** | 3.10+ | Runs all .py files | [python.org](https://www.python.org/) |
-| **Node.js** | 18+ | For .mjs MCP server | [nodejs.org](https://nodejs.org/) |
-| **Git** | Any | To clone the repo | [git-scm.com](https://git-scm.com/) |
-| **Anthropic Key** | - | Powers Claude AI | [console.anthropic.com](https://console.anthropic.com/) |
-| **Ollama** | Optional | Run local LLMs | [ollama.ai](https://ollama.ai/) |
+
+| Tool              | Version  | Why Needed          | Download                                                |
+| :---------------- | :------- | :------------------ | :------------------------------------------------------ |
+| **Python**        | 3.10+    | Runs all .py files  | [python.org](https://www.python.org/)                   |
+| **Node.js**       | 18+      | For .mjs MCP server | [nodejs.org](https://nodejs.org/)                       |
+| **Git**           | Any      | To clone the repo   | [git-scm.com](https://git-scm.com/)                     |
+| **Anthropic Key** | -        | Powers Claude AI    | [console.anthropic.com](https://console.anthropic.com/) |
+| **Ollama**        | Optional | Run local LLMs      | [ollama.ai](https://ollama.ai/)                         |
 
 ---
 
@@ -144,16 +155,19 @@ notepad mcp-servers\.env
 ## ⚙️ Configuration
 
 ### 1. Environment Variables
+
 Copy `mcp-servers/.env.example` to `mcp-servers/.env` and add your **ANTHROPIC_API_KEY**.
 
 > ⚠️ **Security:** Never commit your `.env` file. Keep `GODMODE=false` (the default) until you fully understand the implications of elevated shell access.
 
 ### 2. Config Files
+
 - `mcp-servers/config/api_config.json`: Choose your model (default: `claude-3-haiku-20240307`).
 - `mcp-servers/config/mcp_config.json`: Define which MCP servers to start.
 - `mcp-servers/config/agent_config.json`: Set behavior (retries, parallelism).
 
 ### 3. Claude Desktop Integration
+
 To use WinClaw directly with Claude Desktop, add the following to your Claude Desktop `claude_desktop_config.json`:
 
 ```json
@@ -176,16 +190,19 @@ cd mcp-servers
 ```
 
 ### Option A: Simple CLI Chat (Easiest)
+
 ```powershell
 python winclaw_main.py
 ```
 
 ### Option B: Full Gateway Server (REST API)
+
 ```powershell
 python start_gateway.py
 ```
 
 ### Option C: Start Everything at Once (Recommended)
+
 ```powershell
 .\start_complete_system.bat
 ```
@@ -193,7 +210,9 @@ python start_gateway.py
 ---
 
 ## 🛠 Available Tools
+
 The MCP server exposes **21 tools** to the AI, including:
+
 - **windows-mcp-snapshot**: Take a screenshot.
 - **windows-mcp-click**: Click at x,y coordinates.
 - **windows-mcp-type**: Type text anywhere.
@@ -209,19 +228,24 @@ The MCP server exposes **21 tools** to the AI, including:
 ---
 
 ## 💬 WhatsApp Bridge
+
 Start the bridge server to send/receive messages via AI:
+
 ```powershell
 python mcp-servers\whatsapp_log_bridge_server.py
 ```
+
 It runs at `http://localhost:5001`.
 
 ---
 
 ## ❓ FAQ for Beginners
+
 **Q: Is this safe? Can the AI delete my files?**
 A: The AI only does what you ask. However, the Shell tool can run any PowerShell command — there is no command allowlist, and **commands execute immediately** when the AI calls the tool with no confirmation step. Keep `GODMODE=false` in your `.env` and only grant access to users you fully trust.
 
 **Q: How do I update?**
+
 ```powershell
 git pull origin main
 pip install -r mcp-servers/requirements.txt
@@ -230,6 +254,7 @@ pip install -r mcp-servers/requirements.txt
 ---
 
 ## ⚖️ License
+
 MIT License — free to use, modify, and distribute.
 
 Built with ❤️ using Anthropic Claude, MCP, and Python.

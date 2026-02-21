@@ -13,37 +13,39 @@ var theme_js_1 = require("./terminal/theme.js");
 var globalVerbose = false;
 var globalYes = false;
 function setVerbose(v) {
-    globalVerbose = v;
+  globalVerbose = v;
 }
 function isVerbose() {
-    return globalVerbose;
+  return globalVerbose;
 }
 function shouldLogVerbose() {
-    return globalVerbose || (0, logger_js_1.isFileLogLevelEnabled)("debug");
+  return globalVerbose || (0, logger_js_1.isFileLogLevelEnabled)("debug");
 }
 function logVerbose(message) {
-    if (!shouldLogVerbose())
-        return;
-    try {
-        (0, logger_js_1.getLogger)().debug({ message: message }, "verbose");
-    }
-    catch (_a) {
-        // ignore logger failures to avoid breaking verbose printing
-    }
-    if (!globalVerbose)
-        return;
-    console.log(theme_js_1.theme.muted(message));
+  if (!shouldLogVerbose()) {
+    return;
+  }
+  try {
+    (0, logger_js_1.getLogger)().debug({ message: message }, "verbose");
+  } catch (_a) {
+    // ignore logger failures to avoid breaking verbose printing
+  }
+  if (!globalVerbose) {
+    return;
+  }
+  console.log(theme_js_1.theme.muted(message));
 }
 function logVerboseConsole(message) {
-    if (!globalVerbose)
-        return;
-    console.log(theme_js_1.theme.muted(message));
+  if (!globalVerbose) {
+    return;
+  }
+  console.log(theme_js_1.theme.muted(message));
 }
 function setYes(v) {
-    globalYes = v;
+  globalYes = v;
 }
 function isYes() {
-    return globalYes;
+  return globalYes;
 }
 exports.success = theme_js_1.theme.success;
 exports.warn = theme_js_1.theme.warn;

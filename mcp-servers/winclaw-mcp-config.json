@@ -1,7 +1,7 @@
 {
   "$schema": "https://docs.winclaw.ai/config-schema.json",
   "$comment": "Add these settings to your winclaw.json to enable the MCP tools. Replace <WINCLAW_DIR> with the absolute path to your winclaw checkout.",
-  
+
   "agents": {
     "defaults": {
       "cliBackends": {
@@ -17,7 +17,7 @@
           "serialize": false
         }
       },
-      
+
       "models": {
         "$comment": "Optional: Configure aliases for common MCP tools",
         "mcp:windows-snapshot": {
@@ -34,17 +34,8 @@
   },
 
   "tools": {
-    "allow": [
-      "read",
-      "write",
-      "edit",
-      "exec",
-      "web_search",
-      "web_fetch"
-    ],
-    "alsoAllow": [
-      "mcp"
-    ]
+    "allow": ["read", "write", "edit", "exec", "web_search", "web_fetch"],
+    "alsoAllow": ["mcp"]
   },
 
   "$comment_about_mcp_tools": {

@@ -2,12 +2,7 @@
   "enabled": true,
   "credentials_path": "keys/vision-key.json",
   "project_id": "your-gcp-project-id",
-  "features": [
-    "LABEL_DETECTION",
-    "TEXT_DETECTION",
-    "OBJECT_LOCALIZATION",
-    "FACE_DETECTION"
-  ],
+  "features": ["LABEL_DETECTION", "TEXT_DETECTION", "OBJECT_LOCALIZATION", "FACE_DETECTION"],
   "max_results": 50,
   "cache_enabled": true,
   "cache_ttl_seconds": 300,
