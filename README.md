@@ -19,7 +19,7 @@ Connect AI models (Claude, Ollama/DeepSeek) to 21 Windows automation tools. Cont
 
 ---
 
-## 🧐 What is This?
+## What is This?
 **WinClaw** is an AI agent framework that gives Claude (or any LLM) the ability to control your Windows PC in real-time. It uses the **Model Context Protocol (MCP)**, an open standard that lets AI models call tools like taking a screenshot, clicking a button, or running a shell command during a conversation.
 
 **In simple terms:**
@@ -29,7 +29,7 @@ Connect AI models (Claude, Ollama/DeepSeek) to 21 Windows automation tools. Cont
 
 ---
 
-## 🏗 Architecture Overview
+## Architecture Overview
 ```
 YOU (User Chat via API)
       │
@@ -58,7 +58,7 @@ WhatsApp Bridge (whatsapp_log_bridge_server.py — HTTP port 5001)
 
 ---
 
-## 📂 Folder Structure
+## Folder Structure
 
 All core WinClaw files live under `mcp-servers/`.
 
@@ -108,7 +108,7 @@ All core WinClaw files live under `mcp-servers/`.
 
 ---
 
-## 📋 Prerequisites
+## Prerequisites
 | Tool | Version | Why Needed | Download |
 | :--- | :--- | :--- | :--- |
 | **Python** | 3.10+ | Runs all .py files | [python.org](https://www.python.org/) |
@@ -119,7 +119,7 @@ All core WinClaw files live under `mcp-servers/`.
 
 ---
 
-## 📥 Installation
+## Installation
 
 ```powershell
 # 1. Clone the repository
@@ -141,7 +141,7 @@ notepad mcp-servers\.env
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
 ### 1. Environment Variables
 Copy `mcp-servers/.env.example` to `mcp-servers/.env` and add your **ANTHROPIC_API_KEY**.
@@ -169,7 +169,7 @@ To use WinClaw directly with Claude Desktop, add the following to your Claude De
 
 ---
 
-## 🏃 Running the Server
+## Running the Server
 
 ```powershell
 cd mcp-servers
@@ -192,7 +192,7 @@ python start_gateway.py
 
 ---
 
-## 🛠 Available Tools
+## Available Tools
 The MCP server exposes **21 tools** to the AI, including:
 - **windows-mcp-snapshot**: Take a screenshot.
 - **windows-mcp-click**: Click at x,y coordinates.
@@ -208,7 +208,7 @@ The MCP server exposes **21 tools** to the AI, including:
 
 ---
 
-## 💬 WhatsApp Bridge
+## WhatsApp Bridge
 Start the bridge server to send/receive messages via AI:
 ```powershell
 python mcp-servers\whatsapp_log_bridge_server.py
