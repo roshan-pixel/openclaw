@@ -39,7 +39,7 @@ echo.
 REM Check directory
 if not exist "openclaw_enhanced_gateway_ULTIMATE.py" (
     echo ERROR: openclaw_enhanced_gateway_ULTIMATE.py not found!
-    echo Please run from: C:\Users\sgarm\openclaw-repos\openclaw\mcp-servers
+    echo Please run from the mcp-servers directory.
     pause
     exit /b 1
 )
@@ -103,7 +103,7 @@ echo IMPORTANT: OpenClaw Configuration
 echo ========================================
 echo.
 echo Make sure your OpenClaw config points to ULTIMATE:
-echo   File: C:\Users\sgarm\.openclaw\openclaw.json
+echo   File: %USERPROFILE%\.openclaw\openclaw.json
 echo.
 echo   Required setting:
 echo   {

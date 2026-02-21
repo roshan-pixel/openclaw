@@ -1,7 +1,7 @@
 {
   "enabled": true,
-  "credentials_path": "C:\\Users\\sgarm\\openclaw-repos\\openclaw\\keys\\vision-key.json",
-  "project_id": "openclaw-vision-487213",
+  "credentials_path": "keys/vision-key.json",
+  "project_id": "your-gcp-project-id",
   "features": [
     "LABEL_DETECTION",
     "TEXT_DETECTION",

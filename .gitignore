@@ -93,12 +93,16 @@ package-lock.json
 
 # Local iOS signing overrides
 apps/ios/LocalSigning.xcconfig
-"keys/" 
-".env.backup" 
-"whatsapp-contacts.json" 
-".serena/cache/typescript/document_symbols.pkl" 
-"structure.txt" 
+keys/
+.env.backup
+whatsapp-contacts.json
+.serena/cache/typescript/document_symbols.pkl
+structure.txt
 
+# Sensitive backup and credential files
+*.backup
+.env.*
+!.env.example
 
 # Sensitive keys
 keys/

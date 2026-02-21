@@ -19,7 +19,7 @@ echo.
 
 echo Step 2: Verifying config is valid...
 echo ============================================================
-cd C:\Users\sgarm\.WinClaw
+cd /d "%USERPROFILE%\.WinClaw"
 if not exist "WinClaw.json" (
     echo ERROR: Config file missing!
     if exist "WinClaw.json.bak" (
@@ -36,7 +36,7 @@ echo.
 
 echo Step 3: Starting system...
 echo ============================================================
-cd C:\Users\sgarm\WinClaw-repos\WinClaw\mcp-servers
+cd /d "%~dp0"
 
 if exist "FINAL-PATCH.bat" (
     echo Running FINAL-PATCH.bat...

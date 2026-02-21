@@ -95,23 +95,21 @@ npm run gateway  # Shows live logs
 
 **Windows:**
 ```
-C:\Users\sgarm\.openclaw\openclaw.json
+%USERPROFILE%\.openclaw\openclaw.json
 ```
 
 **Credentials:**
 ```
-C:\Users\sgarm\.openclaw\credentials\whatsapp\default\creds.json
+%USERPROFILE%\.openclaw\credentials\whatsapp\default\creds.json
 ```
 
 ---
 
 ## 📞 YOUR SETUP
 
-**Location:** Aizawl, Mizoram, India  
-**Phone Format:** +91XXXXXXXXXX (10 digits)  
-**Time Zone:** IST (UTC+5:30)  
+**Phone Format:** +<country_code><10_digits> (e.g. `+12125551234`)
 
-**Example phone:** `+919876543210`  
+**Example phone:** `+12125551234`  
 **OpenAI Key:** Get from https://platform.openai.com/api-keys
 
 ---
@@ -147,6 +145,5 @@ WhatsApp: ✓ linked, connected
 
 ---
 
-**Created for:** sgarm @ strorisser tunnel  
 **Date:** January 31, 2026  
 **Next Step:** Install Node.js if not done yet!

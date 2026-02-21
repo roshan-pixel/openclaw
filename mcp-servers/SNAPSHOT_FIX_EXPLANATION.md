@@ -106,7 +106,7 @@ async def execute(self, arguments: dict):
 ## 🚀 **Deployment**
 
 1. **Download** `snapshot_tool_fixed.py`
-2. **Save to:** `C:\Users\sgarm\openclaw-repos\openclaw\mcp-servers\`
+2. **Save to:** `C:\path\to\winclaw\mcp-servers\`
 3. **Run:** `fix_snapshot_tool.bat`
 4. **Restart:** `FINAL-PATCH.bat`
 5. **Test:** "Take a screenshot" from WhatsApp

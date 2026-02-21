@@ -66,15 +66,18 @@ class ShellTool(BaseTool):
                         "description": "Set to true to acknowledge that the command is destructive"
                     }
                 },
-                "required": ["command"]
+                "required": ["command", "confirmed"]
             }
         )
-    
+
     async def execute(self, arguments: dict) -> Sequence[TextContent | ImageContent | EmbeddedResource]:
         is_valid, error = self.validate_arguments(arguments, self.get_tool_definition().inputSchema)
         if not is_valid:
             return [TextContent(type="text", text=f"ERROR: {error}")]
-        
+
+        if not arguments.get("confirmed", False):
+            return [TextContent(type="text", text="ERROR: Shell execution requires confirmed=true. Set confirmed=true to acknowledge you intend to run this command.")]
+
         command = arguments["command"]
         shell = arguments.get("shell", "powershell")
         timeout = arguments.get("timeout", 30)

@@ -18,11 +18,11 @@ FILES CREATED:
 STEP 1: Copy Files
 ------------------
 Copy these 6 files to:
-  C:\Users\sgarm\openclaw-repos\openclaw\mcp-servers\
+  C:\path\to\winclaw\mcp-servers\
 
 STEP 2: Install Dependencies (if needed)
 ----------------------------------------
-cd C:\Users\sgarm\openclaw-repos\openclaw\mcp-servers
+cd C:\path\to\winclaw\mcp-servers
 pip install -r requirements.txt
 
 STEP 3: Start Everything

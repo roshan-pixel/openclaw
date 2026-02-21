@@ -28,10 +28,10 @@ echo   - Automatic verification
 echo.
 
 REM Check directory
-cd /d C:\Users\sgarm\openclaw-repos\openclaw\mcp-servers
+cd /d "%~dp0"
 if not exist "openclaw_enhanced_gateway_PERMANENT.py" (
     echo [ERROR] Please ensure you're in the correct directory
-    echo Location: C:\Users\sgarm\openclaw-repos\openclaw\mcp-servers
+    echo Location: %~dp0
     pause
     exit /b 1
 )
@@ -104,7 +104,6 @@ echo.
 
 echo [2/5] Starting LiteLLM Proxy...
 echo ========================================
-cd /d C:\Users\sgarm
 start "LiteLLM" cmd /k "litellm --config litellm_config.yaml --port 4000"
 echo [OK] LiteLLM starting...
 timeout /t 8 /nobreak >nul
@@ -112,7 +111,7 @@ echo.
 
 echo [3/5] Starting MCP Server (21 Tools)...
 echo ========================================
-cd /d C:\Users\sgarm\openclaw-repos\openclaw\mcp-servers
+cd /d "%~dp0"
 start "MCP Server" cmd /k "python windows_mcp_server.py"
 echo [OK] MCP Server starting...
 timeout /t 5 /nobreak >nul

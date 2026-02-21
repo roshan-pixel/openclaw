@@ -777,11 +777,11 @@ async def create_response(request: ChatRequest):
 
         logger.info(f"🔧 Loaded {len(tools)} tools for AI")
 
-        # Call ULTIMATE gateway (18788) via litellm-compatible interface
+        # Call ULTIMATE gateway via litellm-compatible interface
         response = await litellm.acompletion(
             model="deepseek-r1:8b",
             messages=request.messages,
-            api_base="http://localhost:18788",
+            api_base=WHATSAPP_BRIDGE_URL,
             tools=tools if tools else None,
             max_tokens=request.max_tokens,
             stream=False
@@ -846,7 +846,7 @@ async def create_response(request: ChatRequest):
             final_response = await litellm.acompletion(
                 model="deepseek-r1:8b",
                 messages=messages,
-                api_base="http://localhost:18788",
+                api_base=WHATSAPP_BRIDGE_URL,
                 max_tokens=request.max_tokens,
                 stream=False
             )

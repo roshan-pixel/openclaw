@@ -1,8 +1,11 @@
+import os
 import requests
 import json
 
-GATEWAY_URL = "http://localhost:8000"
-GATEWAY_API_KEY = "dev-key-123"
+GATEWAY_URL = os.environ.get("WINCLAW_GATEWAY_URL", "http://localhost:8000")
+GATEWAY_API_KEY = os.environ.get("WINCLAW_API_KEY", "")
+if not GATEWAY_API_KEY:
+    raise SystemExit("ERROR: Set WINCLAW_API_KEY environment variable before running this test.")
 
 def test_memory():
     print("🧠 Testing Gateway v4.0 Memory...")

@@ -4,8 +4,8 @@
       "command": "python",
       "args": ["windows_mcp_server.py"],
       "env": {
-        "GODMODE": "true",
-        "ADMIN_MODE": "true",
+        "GODMODE": "false",
+        "ADMIN_MODE": "false",
         "LOG_LEVEL": "INFO",
         "MCP_MODE": "true"
       }

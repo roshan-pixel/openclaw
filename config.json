@@ -3,7 +3,7 @@
     "windows-mcp": {
       "command": "python",
       "args": [
-        "C:\\Users\\sgarm\\openclaw-repos\\openclaw\\mcp-servers\\windows_mcp_server.py"
+        "mcp-servers/windows_mcp_server.py"
       ],
       "env": {},
       "enabled": true

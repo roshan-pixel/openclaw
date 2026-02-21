@@ -56,8 +56,8 @@ Make sure you're using the correct Python environment.
 ### Fix 3: Verify Working Directory
 The server must be run from the directory containing the `tools` folder:
 
-```bash
-cd C:\Users\sgarm\openclaw-repos\openclaw\mcp-servers
+```powershell
+cd C:\path\to\winclaw\mcp-servers
 python windows_mcp_server.py
 ```
 

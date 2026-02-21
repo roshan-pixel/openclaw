@@ -13,7 +13,7 @@ import hashlib
 
 # Gateway v4.0
 GATEWAY_URL = "http://localhost:8000"
-GATEWAY_API_KEY = "dev-key-123"
+GATEWAY_API_KEY = os.environ.get("WINCLAW_API_KEY", "")
 
 # OpenClaw CLI log file (TODAY'S LOG)
 OPENCLAW_LOG = r"C:\tmp\openclaw\openclaw-2026-02-14.log"

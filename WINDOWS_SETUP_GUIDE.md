@@ -48,7 +48,7 @@ v20.11.0 (or similar)
 Once Node.js is installed, run:
 
 ```powershell
-cd C:\Users\sgarm\openclaw-repos\openclaw
+cd C:\path\to\winclaw
 npm install
 ```
 

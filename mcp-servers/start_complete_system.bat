@@ -7,7 +7,7 @@ echo.
 REM Check if running in correct directory
 if not exist "openclaw_enhanced_gateway.py" (
     echo Error: Please run this script from the mcp-servers directory
-    echo Location: C:\Users\sgarm\openclaw-repos\openclaw\mcp-servers
+    echo Location: %~dp0
     pause
     exit /b 1
 )
@@ -26,14 +26,13 @@ echo.
 
 echo Step 2: Starting LiteLLM Proxy...
 echo ========================================
-cd /d C:\Users\sgarm
 start "LiteLLM" cmd /k "litellm --config litellm_config.yaml --port 4000"
 timeout /t 5 /nobreak >nul
 echo.
 
 echo Step 3: Starting MCP Server (21 Tools)...
 echo ========================================
-cd /d C:\Users\sgarm\openclaw-repos\openclaw\mcp-servers
+cd /d %~dp0
 start "MCP Server" cmd /k "python windows_mcp_server.py"
 timeout /t 3 /nobreak >nul
 echo.

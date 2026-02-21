@@ -1,3 +1,4 @@
+import os
 import requests
 import json
 import base64
@@ -6,7 +7,7 @@ from datetime import datetime
 print("Calling screenshot API...")
 response = requests.post(
     "http://localhost:8000/screenshot",
-    headers={"X-API-Key": "dev-key-123"}
+    headers={"X-API-Key": os.environ.get("WINCLAW_API_KEY", "")}
 )
 
 data = response.json()

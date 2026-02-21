@@ -25,12 +25,12 @@ pip install -r requirements.txt
 ### Step 2: Copy Files
 Copy all generated files to:
 ```
-C:\Users\sgarm\openclaw-repos\openclaw\mcp-servers\
+C:\path\to\winclaw\mcp-servers\
 ```
 
 ### Step 3: Start Everything
 ```cmd
-cd C:\Users\sgarm\openclaw-repos\openclaw\mcp-servers
+cd C:\path\to\winclaw\mcp-servers
 start_complete_system.bat
 ```
 
@@ -84,25 +84,25 @@ Gateway logs: `logs/enhanced_gateway.log`
 
 Terminal 1:
 ```cmd
-cd C:\Users\sgarm
+cd %USERPROFILE%
 litellm --config litellm_config.yaml --port 4000
 ```
 
 Terminal 2:
 ```cmd
-cd C:\Users\sgarm\openclaw-repos\openclaw\mcp-servers
+cd C:\path\to\winclaw\mcp-servers
 python windows_mcp_server.py
 ```
 
 Terminal 3:
 ```cmd
-cd C:\Users\sgarm\openclaw-repos\openclaw\mcp-servers
+cd C:\path\to\winclaw\mcp-servers
 python whatsapp_log_bridge_server.py
 ```
 
 Terminal 4:
 ```cmd
-cd C:\Users\sgarm\openclaw-repos\openclaw\mcp-servers
+cd C:\path\to\winclaw\mcp-servers
 python openclaw_enhanced_gateway.py
 ```
 

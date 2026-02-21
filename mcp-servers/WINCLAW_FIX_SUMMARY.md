@@ -37,7 +37,7 @@ The config is now valid JSON again.
 
 **Option 1: Automatic (Recommended)**
 ```bash
-cd C:\Users\sgarm\WinClaw-repos\WinClaw\mcp-servers
+cd C:\path\to\winclaw\mcp-servers
 restart_WinClaw_fixed.bat
 ```
 
@@ -46,7 +46,7 @@ restart_WinClaw_fixed.bat
 # 1. Stop all services (close windows or Ctrl+C)
 
 # 2. Start system
-cd C:\Users\sgarm\WinClaw-repos\WinClaw\mcp-servers
+cd C:\path\to\winclaw\mcp-servers
 FINAL-PATCH.bat
 ```
 
@@ -72,7 +72,7 @@ You should receive a response within 10-30 seconds.
 
 ### **3. Check Gateway Errors**
 ```bash
-type C:\Users\sgarm\.WinClaw\gateway-err.log
+type %USERPROFILE%\.WinClaw\gateway-err.log
 ```
 
 Should show NO new errors after restart.
@@ -126,7 +126,7 @@ The screenshot tool hanging issue is SEPARATE from this.
 
 **To fix screenshots:**
 ```bash
-cd C:\Users\sgarm\WinClaw-repos\WinClaw\mcp-servers
+cd C:\path\to\winclaw\mcp-servers
 # Download snapshot_tool_fixed.py
 # Run: fix_snapshot_tool.bat
 ```
@@ -135,7 +135,7 @@ cd C:\Users\sgarm\WinClaw-repos\WinClaw\mcp-servers
 Currently WinClaw uses LiteLLM directly (port 4100).
 To use ULTIMATE Gateway with MCP tools (port 18788):
 
-Edit `C:\Users\sgarm\.WinClaw\WinClaw.json`:
+Edit `%USERPROFILE%\.WinClaw\WinClaw.json`:
 ```json
 {
   "models": {
@@ -175,13 +175,13 @@ You'd need to modify ULTIMATE to accept OpenAI-compatible requests.
 Check these logs:
 ```bash
 # WinClaw errors
-type C:\Users\sgarm\.WinClaw\gateway-err.log
+type %USERPROFILE%\.WinClaw\gateway-err.log
 
 # WinClaw activity
-type C:\Users\sgarm\.WinClaw\logs\WinClaw.log | findstr "outbound"
+type %USERPROFILE%\.WinClaw\logs\WinClaw.log | findstr "outbound"
 
 # ULTIMATE Gateway
-type C:\Users\sgarm\WinClaw-repos\WinClaw\mcp-servers\logs\ultimate_gateway.log
+type C:\path\to\winclaw\mcp-servers\logs\ultimate_gateway.log
 ```
 
 Look for:

@@ -1,4 +1,4 @@
-﻿"""
+"""
 Registry Tool - Windows Registry operations
 """
 
@@ -44,6 +44,11 @@ class RegistryTool:
                         "type": "string",
                         "enum": ["REG_SZ", "REG_DWORD", "REG_BINARY", "REG_MULTI_SZ", "REG_EXPAND_SZ"],
                         "description": "Registry value type (for write action)"
+                    },
+                    "confirmed": {
+                        "type": "boolean",
+                        "default": False,
+                        "description": "Set to true to confirm write/delete operations. Required for any action that modifies the registry."
                     }
                 },
                 "required": ["action", "hive", "key_path"]
@@ -78,7 +83,14 @@ class RegistryTool:
         hive_name = arguments.get("hive")
         key_path = arguments.get("key_path")
         value_name = arguments.get("value_name", "")
-        
+
+        # Require explicit confirmation for any mutating operation
+        if action in ("write", "delete") and not arguments.get("confirmed", False):
+            return [TextContent(
+                type="text",
+                text=f"✗ Registry {action} requires confirmed=true. Set confirmed=true to acknowledge this will modify the registry."
+            )]
+
         hive = self._get_hive(hive_name)
         
         try:

@@ -76,10 +76,11 @@ except Exception as e:
 
 # 4. Check .env files
 print("\n4. .env Files Check:")
+_home = os.path.expanduser("~")
 env_locations = [
-    r"C:\Users\sgarm\openclaw-repos\openclaw\.env",
-    r"C:\Users\sgarm\.openclaw\.env",
-    r"C:\Users\sgarm\openclaw-repos\.env",
+    os.path.join(_home, "openclaw-repos", "openclaw", ".env"),
+    os.path.join(_home, ".openclaw", ".env"),
+    os.path.join(_home, "openclaw-repos", ".env"),
 ]
 
 for env_path in env_locations:

@@ -1,5 +1,5 @@
 @echo off
-cd /d C:\Users\sgarm\WinClaw-repos\WinClaw
+cd /d %~dp0
 
 echo Stopping existing gateway...
 WinClaw gateway stop
